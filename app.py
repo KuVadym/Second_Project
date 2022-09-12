@@ -3,7 +3,7 @@ from core.config import settings
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from models.models_mongo import Record, Note, Tag
+from models.models_mongo import Emails, Record, Note, Tag, Phones, Records, User
 from api.api_v1.router import router
 
 
@@ -29,7 +29,7 @@ async def app_init():
     await init_beanie(
         database=db_client,
         document_models= [
-            Record, Note, Tag
+            Note, Tag, Record, Emails, Phones, Records, User
         ]
     )
 
