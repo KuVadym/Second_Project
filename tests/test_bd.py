@@ -1,5 +1,5 @@
 import unittest
-import models.models_mongo as model_db
+from models.models_mongo import Tag, File, Note
 from uuid import UUID, uuid4
 from pydantic import Field
 
@@ -14,10 +14,14 @@ class TestApp(unittest.TestCase):
         print("Clear after test")
         self.db.clear()
 
-    def test_create_tag(self):
-        new_tag = model_db.Tag(id="id_tag",
-                               name="test_tag")
-        self.assertEqual(isinstance(new_tag, "Tag"), True)
+    def test_create_file_obj(self):
+        new_file = File()
+        new_file.file = "test_file"
+        self.assertEqual(isinstance(new_file, File), True)
+
+    def test_create_str_obj(self):
+        new_file = str("test_file")
+        self.assertEqual(isinstance(new_file, str), True)
 
 
 if __name__ == '__main__':
