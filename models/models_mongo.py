@@ -10,14 +10,14 @@ from uuid import UUID, uuid4
 class Tag(Document):
     id: UUID = Field(default_factory=uuid4, unique=True)
     name: str
-    class Colltction:
+    class Collection:
         name = 'tag'
 
 class Record(Document):
     id: UUID = Field(default_factory=uuid4, unique=True)
     description: str
     # done: bool
-    class Colltction:
+    class Collection:
         name = 'record'
 
 class Note(Document):
@@ -26,20 +26,20 @@ class Note(Document):
     records: list[Optional[Link[Record]]]
     tags: list[Optional[Link[Tag]]]
     # created = DateTimeField(default=datetime.now()) # Now I don't know how do datatime in project. Try understand it.
-    class Colltction:
+    class Collection:
         name = 'note'
 
 
 class Emails(Document):
     id: UUID = Field(default_factory=uuid4, unique=True)
     email: EmailStr
-    class Colltction:
+    class Collection:
         name = 'email'
 
 class Phones(Document):
     id: UUID = Field(default_factory=uuid4, unique=True)
     phone: str
-    class Colltction:
+    class Collection:
         name = 'phone'
 
 class Records(Document):
@@ -50,7 +50,7 @@ class Records(Document):
     address = str
     emails = list[Optional[Link[Emails]]]
     phones = list[Optional[Link[Phones]]]
-    class Colltction:
+    class Collection:
         name = 'records'
 
 

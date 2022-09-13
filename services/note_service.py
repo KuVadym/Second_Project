@@ -14,6 +14,7 @@ class NoteService:
                 print(tag.name)
                 tag_list.append(Tag(name = tag.name))
             return tag_list
+
         async def create_record(note: NoteAuth):
             rec_list = []
             for rec in note.records:
