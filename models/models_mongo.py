@@ -7,58 +7,6 @@ from pydantic import  BaseModel, EmailStr, Field
 from uuid import UUID, uuid4
 
 
-class Tag(Document):
-    id: UUID = Field(default_factory=uuid4, unique=True)
-    name: str
-    class Colltction:
-        name = 'tag'
-
-class Record(Document):
-    id: UUID = Field(default_factory=uuid4, unique=True)
-    description: str
-    # done: bool
-    class Colltction:
-        name = 'record'
-
-class Note(Document):
-    id: UUID = Field(default_factory=uuid4, unique=True)
-    name: str
-    records: list[Optional[Link[Record]]]
-    tags: list[Optional[Link[Tag]]]
-    # created = DateTimeField(default=datetime.now()) # Now I don't know how do datatime in project. Try understand it.
-    class Colltction:
-        name = 'note'
-
-
-class Emails(Document):
-    id: UUID = Field(default_factory=uuid4, unique=True)
-    email: EmailStr
-    class Colltction:
-        name = 'email'
-
-class Phones(Document):
-    id: UUID = Field(default_factory=uuid4, unique=True)
-    phone: str
-    class Colltction:
-        name = 'phone'
-
-class Records(Document):
-    id: UUID = Field(default_factory=uuid4, unique=True)
-    name = str
-    # Now I don't know how do datatime in project. Try understand it.
-    # birth_date: datetime = Field(default_factory=None) 
-    address = str
-    emails = list[Optional[Link[Emails]]]
-    phones = list[Optional[Link[Phones]]]
-    class Colltction:
-        name = 'records'
-
-
-class File(Document): # Now I don't know how it shoud work 
-    file = str
-    
-
-
 class User(Document):
     user_id: UUID = Field(default_factory=uuid4)
     username: Indexed(str, unique=True)
@@ -94,3 +42,54 @@ class User(Document):
         name = "users"
 
 
+class Tag(Document):
+    id: UUID = Field(default_factory=uuid4, unique=True)
+    name: str
+    class Colltction:
+        name = 'tag'
+
+class Record(Document):
+    id: UUID = Field(default_factory=uuid4, unique=True)
+    description: str
+    # done: bool
+    class Colltction:
+        name = 'record'
+
+class Note(Document):
+    id: UUID = Field(default_factory=uuid4, unique=True)
+    name: str
+    records: list[Optional[Link[Record]]]
+    tags: list[Optional[Link[Tag]]]
+    owner: Link[User]
+    # created = DateTimeField(default=datetime.now()) # Now I don't know how do datatime in project. Try understand it.
+    class Colltction:
+        name = 'note'
+
+
+class Emails(Document):
+    id: UUID = Field(default_factory=uuid4, unique=True)
+    email: EmailStr
+    class Colltction:
+        name = 'email'
+
+class Phones(Document):
+    id: UUID = Field(default_factory=uuid4, unique=True)
+    phone: str
+    class Colltction:
+        name = 'phone'
+
+class Records(Document):
+    id: UUID = Field(default_factory=uuid4, unique=True)
+    name = str
+    # Now I don't know how do datatime in project. Try understand it.
+    # birth_date: datetime = Field(default_factory=None) 
+    address = str
+    emails = list[Optional[Link[Emails]]]
+    phones = list[Optional[Link[Phones]]]
+    owner: Link[User]
+    class Colltction:
+        name = 'records'
+
+
+class File(Document): # Now I don't know how it shoud work 
+    file = str

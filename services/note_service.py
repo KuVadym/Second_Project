@@ -1,17 +1,21 @@
+from typing import List
+from uuid import UUID
 from schemas.note_schema import NoteAuth
-from models.models_mongo import Note, Tag, Record
+from models.models_mongo import Note, Tag, Record, User
 
 
 class NoteService:
-    print('here')
- 
+    @staticmethod
+    async def list_notes(user: User) -> List[Note]:
+        notes = await Note.find(Note.owner.id == user.id).to_list()
+        return notes
+
 
     @staticmethod
-    async def create_note(note: NoteAuth):
+    async def create_note(user: User, note: NoteAuth):
         async def create_tag(note: NoteAuth):
             tag_list = []
             for tag in note.tags:
-                print(tag.name)
                 tag_list.append(Tag(name = tag.name))
             return tag_list
         async def create_record(note: NoteAuth):
@@ -20,12 +24,32 @@ class NoteService:
                 rec_list.append(Record(description = rec.description))
             return rec_list 
         tags,records = await create_tag(note), await create_record(note)
-        print(note.dict())
-        print(type(tags))
-        print(type(records))
         note_in = Note(
             name = note.name,
             records = records,
-            tags = tags
+            tags = tags,
+            owner=user
         )
         return await note_in.save()
+
+
+    @staticmethod
+    async def retrieve_note(current_user: User, note_id: UUID):
+        note = await Note.find_one(Note.id == note_id, Note.owner.id == current_user.id)
+        return note
+    
+    @staticmethod
+    async def update_note(current_user: User, note_id: UUID, data: NoteAuth):
+        note = await NoteService.retrieve_note(current_user, note_id)
+        await note.update({"$set": data.dict(exclude_unset=True)})
+        
+        await note.save()
+        return note
+    
+    @staticmethod
+    async def delete_note(current_user: User, note_id: UUID) -> None:
+        note = await NoteService.retrieve_note(current_user, note_id)
+        if note:
+            await note.delete()
+            
+        return None

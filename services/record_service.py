@@ -1,5 +1,5 @@
 from schemas.record_schema import RecordAuth
-from models.models_mongo import Emails, Phones, Records
+from models.models_mongo import Emails, Phones, Records, User
 
 
 class RecordService:
@@ -7,7 +7,7 @@ class RecordService:
  
 
     @staticmethod
-    async def create_record(record: RecordAuth):
+    async def create_record(user: User, record: RecordAuth):
         async def create_phone(record: RecordAuth):
             phone_list = []
             for phone in record.phones:
@@ -32,6 +32,8 @@ class RecordService:
             # birth_date = record.birth_date,
             address = record.address,
             phones = phones,
-            emails = emails
+            emails = emails,
+            owner=user
         )
-        return await record_in.save()
+        await record_in.save()
+        return await record_in
