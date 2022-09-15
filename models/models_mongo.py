@@ -12,10 +12,10 @@ class User(Document):
     username: Indexed(str, unique=True)
     email: Indexed(EmailStr, unique=True)
     hashed_password: str
-    first_name: Optional[str] = None 
+    first_name: Optional[str] = None
     last_name: Optional[str] = None
     disabled: Optional[bool] = None
-    
+
     def __repr__(self) -> str:
         return f"<User {self.email}>"
 
@@ -29,15 +29,15 @@ class User(Document):
         if isinstance(other, User):
             return self.email == other.email
         return False
-    
+
     @property
     def create(self) -> datetime:
         return self.id.generation_time
-    
+
     @classmethod
     async def by_email(self, email: str) -> "User":
         return await self.find_one(self.email == email)
-    
+
     class Collection:
         name = "users"
 
@@ -45,14 +45,14 @@ class User(Document):
 class Tag(Document):
     id: UUID = Field(default_factory=uuid4, unique=True)
     name: str
-    class Colltction:
+    class Collection:
         name = 'tag'
 
 class Record(Document):
     id: UUID = Field(default_factory=uuid4, unique=True)
     description: str
     # done: bool
-    class Colltction:
+    class Collection:
         name = 'record'
 
 class Note(Document):
@@ -62,20 +62,20 @@ class Note(Document):
     tags: list[Optional[Link[Tag]]]
     owner: Link[User]
     # created = DateTimeField(default=datetime.now()) # Now I don't know how do datatime in project. Try understand it.
-    class Colltction:
+    class Collection:
         name = 'note'
 
 
 class Emails(Document):
     id: UUID = Field(default_factory=uuid4, unique=True)
     email: EmailStr
-    class Colltction:
+    class Collection:
         name = 'email'
 
 class Phones(Document):
     id: UUID = Field(default_factory=uuid4, unique=True)
     phone: str
-    class Colltction:
+    class Collection:
         name = 'phone'
 
 class Records(Document):
@@ -87,7 +87,7 @@ class Records(Document):
     emails = list[Optional[Link[Emails]]]
     phones = list[Optional[Link[Phones]]]
     owner: Link[User]
-    class Colltction:
+    class Collection:
         name = 'records'
 
 
