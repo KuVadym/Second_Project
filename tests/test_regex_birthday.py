@@ -19,7 +19,7 @@ class TestRegexBirthday(unittest.TestCase):
         self.assertFalse(regex.check_birthday(birthday))
 
     def test_check_birthday_when_young_year_should_fail(self):
-        birthday = "2014-03-15"
+        birthday = "2025-03-15"
         self.assertFalse(regex.check_birthday(birthday))
 
     def test_check_birthday_when_out_of_range_month_should_fail(self):

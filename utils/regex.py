@@ -1,5 +1,6 @@
 import re
 import typing
+from datetime import datetime
 
 
 def check_phone(phone:str):
@@ -24,5 +25,5 @@ def check_birthday(birthday:str):
         elif int(month) in [4, 6, 9, 11]:
             result = int(day) <= 30
     if result:
-        result = int(year) <= 2012
+        result = int(year) <= datetime.now().year
     return result
