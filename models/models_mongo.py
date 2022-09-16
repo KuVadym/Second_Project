@@ -43,7 +43,7 @@ class User(Document):
 class Tag(Document):
     id: UUID = Field(default_factory=uuid4, unique=True)
     name: str
-    class Colltction:
+    class Collection:
         name = 'tag'
 
 class Record(Document):
