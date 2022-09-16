@@ -1,3 +1,4 @@
+import uvicorn
 from http import server
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
@@ -6,7 +7,6 @@ from fastapi.templating import Jinja2Templates
 from core.config import settings
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
-import uvicorn
 from models.models_mongo import Emails, Record, Note, Tag, Phones, Records, User
 from api.api_v1.router import router
 
@@ -25,6 +25,9 @@ templates = Jinja2Templates(directory="templates")
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+@app.get('/login', response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
 
 @app.on_event("startup")
 async def app_init():

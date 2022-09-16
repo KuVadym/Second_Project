@@ -8,9 +8,16 @@ from models.models_mongo import Emails, Phones
 
 
 class RecordAuth(BaseModel):
-    id: UUID = Field(...,)
     name: str = Field(...,)
-    # birth_date: datetime
+    birth_date: str
+    address: str = Field(...,)
+    emails: List[Emails]
+    phones: List[Phones]
+
+
+class RecordOut (BaseModel):
+    name: str = Field(...,)
+    birth_date: datetime
     address: str = Field(...,)
     emails: List[Emails]
     phones: List[Phones]

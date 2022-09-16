@@ -7,6 +7,6 @@ class NoteAuth(BaseModel):
     name: str = Field(...,)
     records: List[Record] 
     tags: List[Tag] 
-    # print(name, records, tags)
+
 
     

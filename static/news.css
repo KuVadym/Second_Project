@@ -1,0 +1,58 @@
+.containerTab {
+  width: 80%;
+  border: 3px solid black;
+  border-radius: 0.5em;
+  overflow: hidden;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.btnNews {
+  padding: 0.75rem 1.25rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border: none;
+}
+
+.btnNews:hover {
+  background-color: #ddd;
+}
+
+.btnNews.active {
+  background-color: #151515;
+  color: antiquewhite;
+}
+
+.sections {
+  background-color: #151515;
+}
+
+.content.active {
+  padding: 2rem;
+  display: block;
+  color: antiquewhite;
+}
+
+.content.active > h2 {
+  color: antiquewhite;
+}
+
+h2 {
+  font-size: 2.5rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+p {
+  font-size: 1.5rem;
+  letter-spacing: 1.5px;
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+.content {
+  display: none;
+}

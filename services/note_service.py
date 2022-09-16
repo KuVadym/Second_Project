@@ -2,12 +2,14 @@ from typing import List
 from uuid import UUID
 from schemas.note_schema import NoteAuth
 from models.models_mongo import Note, Tag, Record, User
+from collections import OrderedDict
 
 
 class NoteService:
     @staticmethod
     async def list_notes(user: User) -> List[Note]:
         notes = await Note.find(Note.owner.id == user.id).to_list()
+        print(notes)
         return notes
 
 
@@ -54,3 +56,24 @@ class NoteService:
             await note.delete()
             
         return None
+
+    
+    async def search_note(current_user: User, data: str) -> List[Note]:
+        note_list = await Note.find(Note.owner.id == current_user.id, { "$or": [{ 'name': { "$regex": f'{data}' } }, 
+        {'tags': { 'name': {"$regex": f'{data}'} } }, {'records': { 'description': {"$regex": f'{data}'} } }] }).to_list()
+        return note_list
+
+
+    @staticmethod
+    async def sort_list(user: User) -> List[Note]:
+        notes = await Note.find(Note.owner.id == user.id).to_list()
+        note_dict = {}
+        for note in notes:
+            for tags in note.tags:
+                if tags.name in note_dict.keys():
+                    value = note_dict.get(tags.name)
+                    value.append(note)
+                else:
+                    note_dict[tags.name] = [note]
+                    # print(note.name)
+        return OrderedDict(sorted(note_dict.items()))
