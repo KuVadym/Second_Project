@@ -1,62 +1,8 @@
-from datetime import datetime
-# from mongoengine import EmbeddedDocument, Document
-# from mongoengine.fields import BooleanField, DateTimeField, EmbeddedDocumentField, ListField, StringField, FileField
+from datetime import datetime, date
 from typing import Optional
-from beanie import Document, Indexed, Link
-from pydantic import  BaseModel, EmailStr, Field
+from beanie import Document, Indexed, Link, before_event, Replace, Insert
+from pydantic import BaseModel, EmailStr, Field
 from uuid import UUID, uuid4
-
-
-class Tag(Document):
-    id: UUID = Field(default_factory=uuid4, unique=True)
-    name: str
-    class Collection:
-        name = 'tag'
-
-class Record(Document):
-    id: UUID = Field(default_factory=uuid4, unique=True)
-    description: str
-    # done: bool
-    class Collection:
-        name = 'record'
-
-class Note(Document):
-    id: UUID = Field(default_factory=uuid4, unique=True)
-    name: str
-    records: list[Optional[Link[Record]]]
-    tags: list[Optional[Link[Tag]]]
-    # created = DateTimeField(default=datetime.now()) # Now I don't know how do datatime in project. Try understand it.
-    class Collection:
-        name = 'note'
-
-
-class Emails(Document):
-    id: UUID = Field(default_factory=uuid4, unique=True)
-    email: EmailStr
-    class Collection:
-        name = 'email'
-
-class Phones(Document):
-    id: UUID = Field(default_factory=uuid4, unique=True)
-    phone: str
-    class Collection:
-        name = 'phone'
-
-class Records(Document):
-    id: UUID = Field(default_factory=uuid4, unique=True)
-    name = str
-    # Now I don't know how do datatime in project. Try understand it.
-    # birth_date: datetime = Field(default_factory=None) 
-    address = str
-    emails = list[Optional[Link[Emails]]]
-    phones = list[Optional[Link[Phones]]]
-    class Collection:
-        name = 'records'
-
-
-class File(Document): # Now I don't know how it shoud work 
-    file = str
-    
 
 
 class User(Document):
@@ -94,3 +40,63 @@ class User(Document):
         name = "users"
 
 
+class Tag(Document):
+    id: UUID = Field(default_factory=uuid4, unique=True)
+    name: str
+    class Collection:
+        name = 'tag'
+
+class Record(Document):
+    id: UUID = Field(default_factory=uuid4, unique=True)
+    description: str
+    # done: bool
+    class Collection:
+        name = 'record'
+
+class Note(Document):
+    id: UUID = Field(default_factory=uuid4, unique=True)
+    name: str
+    records: list[Optional[Link[Record]]]
+    tags: list[Optional[Link[Tag]]]
+    owner: Link[User]
+    created: datetime = Field(default_factory=datetime.utcnow) # Now I don't know how do datatime in project. Try understand it.
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    class Collection:
+        name = 'note'
+
+    @before_event([Replace, Insert])
+    def update_update_at(self):
+        self.updated_at = datetime.utcnow()
+
+class Emails(Document):
+    id: UUID = Field(default_factory=uuid4, unique=True)
+    email: EmailStr
+    class Collection:
+        name = 'email'
+
+class Phones(Document):
+    id: UUID = Field(default_factory=uuid4, unique=True)
+    phone: str
+    class Collection:
+        name = 'phone'
+
+class Records(Document):
+    id: UUID = Field(default_factory=uuid4, unique=True)
+    name: str
+    birth_date: datetime = Field(default_factory=None) 
+    address: str
+    emails: list[Optional[Link[Emails]]]
+    phones: list[Optional[Link[Phones]]]
+    owner: Link[User]
+    created: datetime = Field(default_factory=datetime.utcnow) # Now I don't know how do datatime in project. Try understand it.
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    class Colltction:
+        name = 'records'
+
+    @before_event([Replace, Insert])
+    def update_update_at(self):
+        self.updated_at = datetime.utcnow()
+
+
+class File(Document): # Now I don't know how it shoud work 
+    file = str
