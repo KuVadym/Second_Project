@@ -3,8 +3,6 @@ from utils import regex
 
 
 class TestRegexBirthday(unittest.TestCase):
-    def setUp(self):
-        print("Setup code. Lets create a new db mock if there is no")
 
     def test_check_birthday_when_should_be_ok(self):
         birthday = "1986-03-15"
