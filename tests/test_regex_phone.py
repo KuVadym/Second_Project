@@ -3,8 +3,6 @@ from utils import regex
 
 
 class TestRegexPhone(unittest.TestCase):
-    def setUp(self):
-        print("Setup code. Lets create a new db mock if there is no")
 
     def test_check_phone_when_10_digits_should_be_ok(self):
         phone = "0935552211"
