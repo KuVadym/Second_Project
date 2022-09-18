@@ -9,7 +9,7 @@ from models.models_mongo import Emails, Phones
 
 class RecordAuth(BaseModel):
     name: str = Field(...,)
-    birth_date: str
+    birth_date: str = None
     address: str = Field(...,)
     emails: List[Emails]
     phones: List[Phones]

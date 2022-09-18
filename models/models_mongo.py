@@ -69,10 +69,19 @@ class Note(Document):
         self.updated_at = datetime.utcnow()
 
 class Emails(Document):
-    id: UUID = Field(default_factory=uuid4, unique=True)
+    id: UUID = Field(default_factory=uuid4, unique=True, alias='_id')
     email: EmailStr
+
     class Collection:
         name = 'email'
+
+    class Config:
+        allow_population_by_field_name = False
+        schema_extra = {
+            "example": {
+                "email": "jdoe@example.com",
+            }
+        }
 
 class Phones(Document):
     id: UUID = Field(default_factory=uuid4, unique=True)
@@ -80,10 +89,18 @@ class Phones(Document):
     class Collection:
         name = 'phone'
 
+    class Config:
+        allow_population_by_field_name = False
+        schema_extra = {
+            "example": {
+                "phone": "08008008080",
+            }
+        }
+
 class Records(Document):
     id: UUID = Field(default_factory=uuid4, unique=True)
     name: str
-    birth_date: datetime = Field(default_factory=None) 
+    birth_date: datetime = None 
     address: str
     emails: list[Optional[Link[Emails]]]
     phones: list[Optional[Link[Phones]]]

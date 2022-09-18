@@ -25,10 +25,13 @@ class RecordService:
                 email_list.append(Emails(email = email.email))
             return email_list 
         phones,emails = await create_phone(record), await create_email(record)
-        print(record.birth_date)  
+        print(record.birth_date)
+        bd = None
+        if record.birth_date:
+            bd = datetime(int(record.birth_date.split('-')[0]), int(record.birth_date.split('-')[1]), int(record.birth_date.split('-')[2][0:2]))
         record_in = Records(
             name = record.name,
-            birth_date =  datetime(int(record.birth_date.split('-')[0]), int(record.birth_date.split('-')[1]), int(record.birth_date.split('-')[2][0:2])),
+            birth_date = bd,
             address = record.address,
             phones = phones,
             emails = emails,
