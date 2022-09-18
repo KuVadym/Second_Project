@@ -20,7 +20,6 @@ async def create_user(data: UserAuth):
         )
 
 
-
 @user_router.get('/me', summary='Get details of currently logged in user', response_model=UserOut)
 async def get_me(user: User = Depends(get_current_user)):
     return user

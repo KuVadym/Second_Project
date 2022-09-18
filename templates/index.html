@@ -23,16 +23,21 @@
     <section class="position-relative">
       <div class="homeContainer d-flex align-items-center">
         <div class="p-5 text-white w-50">
-          <h1 class="display-2 fade-out">Welcome to our Personal helper</h1>
+          <h1 class="display-2 fade-out">
+            Welcome to our personal helper POCKET MEMORY
+          </h1>
           <div class="d-flex gap-4">
             <a
               class="btn btn-primary btn-dark btn-lg"
-              href="/login"
+              href="/signup"
               role="button"
-              >Login</a
-            >
-            <a class="btn btn-primary btn-light btn-lg" href="#" role="button"
               >Signup</a
+            >
+            <a
+              class="btn btn-primary btn-light btn-lg"
+              href="/presentation"
+              role="button"
+              >Presentation</a
             >
           </div>
         </div>
@@ -64,7 +69,20 @@
       </div>
     </section>
     <!-- About App -->
-    <section></section>
+    <section class="p-5 vh-100">
+      <iframe
+        id="frame"
+        src="https://slides.com/vladyslavshumkov/code/embed"
+        width="100%"
+        height="100%"
+        title="Code"
+        scrolling="no"
+        frameborder="0"
+        webkitallowfullscreen
+        mozallowfullscreen
+        allowfullscreen
+      ></iframe>
+    </section>
     <!-- News Section -->
     {% include 'news-section.html' %}
     <!-- Our Team -->
@@ -73,12 +91,14 @@
         <h5 class="section-title h1">OUR TEAM</h5>
         <div class="row">
           <!-- Team member -->
-          <div class="col-xs-12 col-sm-6">
+          <div class="col-xs-12 col-sm-3">
             <div class="image-flip">
               <div class="mainflip flip-0">
                 <div class="frontside">
                   <div class="card">
-                    <div class="card-body text-center">
+                    <div
+                      class="card-body text-center d-flex align-center flex-column justify-content-center"
+                    >
                       <p>
                         <img
                           class="img-fluid"
@@ -86,29 +106,14 @@
                           alt="card image"
                         />
                       </p>
-                      <h4 class="card-title">Sunlimetech</h4>
-                      <p class="card-text">
-                        This is basic card with image on top, title, description
-                        and button.
-                      </p>
-                      <a
-                        href="https://www.fiverr.com/share/qb8D02"
-                        class="btn btn-primary btn-sm"
-                        ><i class="fa fa-plus"></i
-                      ></a>
+                      <h4 class="card-title">Вадим Кузик</h4>
+                      <p class="card-text">Team Lead</p>
                     </div>
                   </div>
                 </div>
-                <div class="backside">
+                <div class="backside w-100">
                   <div class="card">
                     <div class="card-body text-center mt-4">
-                      <h4 class="card-title">Sunlimetech</h4>
-                      <p class="card-text">
-                        This is basic card with image on top, title, description
-                        and button.This is basic card with image on top, title,
-                        description and button.This is basic card with image on
-                        top, title, description and button.
-                      </p>
                       <ul class="list-inline">
                         <li class="list-inline-item">
                           <a
@@ -116,7 +121,10 @@
                             target="_blank"
                             href="https://www.fiverr.com/share/qb8D02"
                           >
-                            <i class="fa fa-facebook"></i>
+                            <i
+                              class="fa fa-linkedin"
+                              style="font-size: 36px"
+                            ></i>
                           </a>
                         </li>
                         <li class="list-inline-item">
@@ -125,25 +133,7 @@
                             target="_blank"
                             href="https://www.fiverr.com/share/qb8D02"
                           >
-                            <i class="fa fa-twitter"></i>
-                          </a>
-                        </li>
-                        <li class="list-inline-item">
-                          <a
-                            class="social-icon text-xs-center"
-                            target="_blank"
-                            href="https://www.fiverr.com/share/qb8D02"
-                          >
-                            <i class="fa fa-skype"></i>
-                          </a>
-                        </li>
-                        <li class="list-inline-item">
-                          <a
-                            class="social-icon text-xs-center"
-                            target="_blank"
-                            href="https://www.fiverr.com/share/qb8D02"
-                          >
-                            <i class="fa fa-google"></i>
+                            <i class="fa fa-github" style="font-size: 36px"></i>
                           </a>
                         </li>
                       </ul>
@@ -155,7 +145,7 @@
           </div>
           <!-- ./Team member -->
           <!-- Team member -->
-          <div class="col-xs-12 col-sm-6">
+          <div class="col-xs-12 col-sm-3">
             <div
               class="image-flip"
               ontouchstart="this.classList.toggle('hover');"
@@ -163,7 +153,9 @@
               <div class="mainflip">
                 <div class="frontside">
                   <div class="card">
-                    <div class="card-body text-center">
+                    <div
+                      class="card-body text-center d-flex align-center flex-column justify-content-center"
+                    >
                       <p>
                         <img
                           class="img-fluid"
@@ -171,29 +163,14 @@
                           alt="card image"
                         />
                       </p>
-                      <h4 class="card-title">Sunlimetech</h4>
-                      <p class="card-text">
-                        This is basic card with image on top, title, description
-                        and button.
-                      </p>
-                      <a
-                        href="https://www.fiverr.com/share/qb8D02"
-                        class="btn btn-primary btn-sm"
-                        ><i class="fa fa-plus"></i
-                      ></a>
+                      <h4 class="card-title">Serhii Plys</h4>
+                      <p class="card-text">Backend, Scrapping</p>
                     </div>
                   </div>
                 </div>
-                <div class="backside">
+                <div class="backside w-100">
                   <div class="card">
                     <div class="card-body text-center mt-4">
-                      <h4 class="card-title">Sunlimetech</h4>
-                      <p class="card-text">
-                        This is basic card with image on top, title, description
-                        and button.This is basic card with image on top, title,
-                        description and button.This is basic card with image on
-                        top, title, description and button.
-                      </p>
                       <ul class="list-inline">
                         <li class="list-inline-item">
                           <a
@@ -201,7 +178,10 @@
                             target="_blank"
                             href="https://www.fiverr.com/share/qb8D02"
                           >
-                            <i class="fa fa-facebook"></i>
+                            <i
+                              class="fa fa-linkedin"
+                              style="font-size: 36px"
+                            ></i>
                           </a>
                         </li>
                         <li class="list-inline-item">
@@ -210,25 +190,7 @@
                             target="_blank"
                             href="https://www.fiverr.com/share/qb8D02"
                           >
-                            <i class="fa fa-twitter"></i>
-                          </a>
-                        </li>
-                        <li class="list-inline-item">
-                          <a
-                            class="social-icon text-xs-center"
-                            target="_blank"
-                            href="https://www.fiverr.com/share/qb8D02"
-                          >
-                            <i class="fa fa-skype"></i>
-                          </a>
-                        </li>
-                        <li class="list-inline-item">
-                          <a
-                            class="social-icon text-xs-center"
-                            target="_blank"
-                            href="https://www.fiverr.com/share/qb8D02"
-                          >
-                            <i class="fa fa-google"></i>
+                            <i class="fa fa-github" style="font-size: 36px"></i>
                           </a>
                         </li>
                       </ul>
@@ -240,7 +202,7 @@
           </div>
           <!-- ./Team member -->
           <!-- Team member -->
-          <div class="col-xs-12 col-sm-6">
+          <div class="col-xs-12 col-sm-3">
             <div
               class="image-flip"
               ontouchstart="this.classList.toggle('hover');"
@@ -248,7 +210,9 @@
               <div class="mainflip">
                 <div class="frontside">
                   <div class="card">
-                    <div class="card-body text-center">
+                    <div
+                      class="card-body text-center d-flex align-center flex-column justify-content-center"
+                    >
                       <p>
                         <img
                           class="img-fluid"
@@ -256,29 +220,14 @@
                           alt="card image"
                         />
                       </p>
-                      <h4 class="card-title">Sunlimetech</h4>
-                      <p class="card-text">
-                        This is basic card with image on top, title, description
-                        and button.
-                      </p>
-                      <a
-                        href="https://www.fiverr.com/share/qb8D02"
-                        class="btn btn-primary btn-sm"
-                        ><i class="fa fa-plus"></i
-                      ></a>
+                      <h4 class="card-title">Susanna Salata</h4>
+                      <p class="card-text">Scrum Master</p>
                     </div>
                   </div>
                 </div>
-                <div class="backside">
+                <div class="backside w-100">
                   <div class="card">
                     <div class="card-body text-center mt-4">
-                      <h4 class="card-title">Sunlimetech</h4>
-                      <p class="card-text">
-                        This is basic card with image on top, title, description
-                        and button.This is basic card with image on top, title,
-                        description and button.This is basic card with image on
-                        top, title, description and button.
-                      </p>
                       <ul class="list-inline">
                         <li class="list-inline-item">
                           <a
@@ -286,7 +235,10 @@
                             target="_blank"
                             href="https://www.fiverr.com/share/qb8D02"
                           >
-                            <i class="fa fa-facebook"></i>
+                            <i
+                              class="fa fa-linkedin"
+                              style="font-size: 36px"
+                            ></i>
                           </a>
                         </li>
                         <li class="list-inline-item">
@@ -295,25 +247,7 @@
                             target="_blank"
                             href="https://www.fiverr.com/share/qb8D02"
                           >
-                            <i class="fa fa-twitter"></i>
-                          </a>
-                        </li>
-                        <li class="list-inline-item">
-                          <a
-                            class="social-icon text-xs-center"
-                            target="_blank"
-                            href="https://www.fiverr.com/share/qb8D02"
-                          >
-                            <i class="fa fa-skype"></i>
-                          </a>
-                        </li>
-                        <li class="list-inline-item">
-                          <a
-                            class="social-icon text-xs-center"
-                            target="_blank"
-                            href="https://www.fiverr.com/share/qb8D02"
-                          >
-                            <i class="fa fa-google"></i>
+                            <i class="fa fa-github" style="font-size: 36px"></i>
                           </a>
                         </li>
                       </ul>
@@ -325,7 +259,7 @@
           </div>
           <!-- ./Team member -->
           <!-- Team member -->
-          <div class="col-xs-12 col-sm-6">
+          <div class="col-xs-12 col-sm-3">
             <div
               class="image-flip"
               ontouchstart="this.classList.toggle('hover');"
@@ -333,7 +267,9 @@
               <div class="mainflip">
                 <div class="frontside">
                   <div class="card">
-                    <div class="card-body text-center">
+                    <div
+                      class="card-body text-center d-flex align-center flex-column justify-content-center"
+                    >
                       <p>
                         <img
                           class="img-fluid"
@@ -341,29 +277,14 @@
                           alt="card image"
                         />
                       </p>
-                      <h4 class="card-title">Sunlimetech</h4>
-                      <p class="card-text">
-                        This is basic card with image on top, title, description
-                        and button.
-                      </p>
-                      <a
-                        href="https://www.fiverr.com/share/qb8D02"
-                        class="btn btn-primary btn-sm"
-                        ><i class="fa fa-plus"></i
-                      ></a>
+                      <h4 class="card-title">Vladyslav Shumkov</h4>
+                      <p class="card-text">Frontend</p>
                     </div>
                   </div>
                 </div>
-                <div class="backside">
+                <div class="backside w-100">
                   <div class="card">
                     <div class="card-body text-center mt-4">
-                      <h4 class="card-title">Sunlimetech</h4>
-                      <p class="card-text">
-                        This is basic card with image on top, title, description
-                        and button.This is basic card with image on top, title,
-                        description and button.This is basic card with image on
-                        top, title, description and button.
-                      </p>
                       <ul class="list-inline">
                         <li class="list-inline-item">
                           <a
@@ -371,7 +292,10 @@
                             target="_blank"
                             href="https://www.fiverr.com/share/qb8D02"
                           >
-                            <i class="fa fa-facebook"></i>
+                            <i
+                              class="fa fa-linkedin"
+                              style="font-size: 36px"
+                            ></i>
                           </a>
                         </li>
                         <li class="list-inline-item">
@@ -380,25 +304,7 @@
                             target="_blank"
                             href="https://www.fiverr.com/share/qb8D02"
                           >
-                            <i class="fa fa-twitter"></i>
-                          </a>
-                        </li>
-                        <li class="list-inline-item">
-                          <a
-                            class="social-icon text-xs-center"
-                            target="_blank"
-                            href="https://www.fiverr.com/share/qb8D02"
-                          >
-                            <i class="fa fa-skype"></i>
-                          </a>
-                        </li>
-                        <li class="list-inline-item">
-                          <a
-                            class="social-icon text-xs-center"
-                            target="_blank"
-                            href="https://www.fiverr.com/share/qb8D02"
-                          >
-                            <i class="fa fa-google"></i>
+                            <i class="fa fa-github" style="font-size: 36px"></i>
                           </a>
                         </li>
                       </ul>
@@ -411,84 +317,7 @@
         </div>
       </div>
     </section>
-    <!-- Gismeteo informer START -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://www.gismeteo.ua/assets/flat-ui/legacy/css/informer.min.css"
-    />
-    <div
-      id="gsInformerID-ccWk6f1Lp3HyJ0"
-      class="gsInformer"
-      style="width: 225px; height: 90px"
-    >
-      <div class="gsIContent">
-        <div id="cityLink">
-          <a
-            href="https://www.gismeteo.ua/ua/weather-kyiv-4944/"
-            target="_blank"
-            title="Погода у Києві"
-          >
-            <img
-              src="https://www.gismeteo.ua/assets/flat-ui/img/gisloader.svg"
-              width="24"
-              height="24"
-              alt="Погода у Києві"
-            />
-          </a>
-        </div>
-        <div class="gsLinks">
-          <table>
-            <tr>
-              <td>
-                <div class="leftCol">
-                  <a
-                    href="https://www.gismeteo.ua/ua/"
-                    target="_blank"
-                    title="Погода"
-                  >
-                    <img
-                      alt="Погода"
-                      src="https://www.gismeteo.ua/assets/flat-ui/img/logo-mini2.png"
-                      align="middle"
-                      border="0"
-                      width="11"
-                      height="16"
-                    />
-                    <img
-                      src="https://www.gismeteo.ua/assets/flat-ui/img/informer/gismeteo.svg"
-                      border="0"
-                      align="middle"
-                      style="left: 5px; top: 1px"
-                    />
-                  </a>
-                </div>
-                <div class="rightCol">
-                  <a
-                    href="https://www.gismeteo.ua/ua/weather-kyiv-4944/2-weeks/"
-                    target="_blank"
-                    title="Погода у Києві на 2 тижні"
-                  >
-                    <img
-                      src="https://www.gismeteo.ua/assets/flat-ui/img/informer/forecast-2weeks.ua.svg"
-                      border="0"
-                      align="middle"
-                      style="top: auto"
-                      alt="Погода у Києві на 2 тижні"
-                    />
-                  </a>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-    <script
-      async
-      src="https://www.gismeteo.ua/api/informer/getinformer/?hash=ccWk6f1Lp3HyJ0"
-    ></script>
-    <!-- Gismeteo informer END -->
+
     <script
       src="{{ url_for('static', path='/js/news.js') }}"
       type="module"
