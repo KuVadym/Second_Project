@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from schemas.record_schema import RecordAuth, RecordOut
 from services.record_service import RecordService
 from models.models_mongo import Records, User
@@ -15,7 +15,7 @@ async def list(current_user: User = Depends(get_current_user)):
 
 
 @record_router.get('/birthday', summary="Get all records whom b-day is coming", response_model=List[RecordOut])
-async def b_day_list( days, current_user: User = Depends(get_current_user)):
+async def b_day_list(days, current_user: User = Depends(get_current_user)):
     return await RecordService.coming_birthday(current_user, days)    
 
 

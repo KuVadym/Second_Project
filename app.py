@@ -1,4 +1,3 @@
-import imp
 import uvicorn
 from http import server
 from fastapi import FastAPI, Request, Form, Response, Depends, APIRouter
@@ -16,12 +15,13 @@ from api.auth.forms import LoginForm, UserCreateForm
 from api.auth.jwt import login
 from api.deps.user_deps import get_current_user
 from api.api_v1.hendlers.user import create_user
+from fastapi.security.utils import get_authorization_scheme_param
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
-api_router = APIRouter
+api_router = APIRouter()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -46,22 +46,11 @@ async def signup(response: Response, request: Request):
         form = LoginForm(request) 
     await form.load_data()
     if await form.is_valid():
-        if type(form) == LoginForm:  
-            # try:
+        if type(form) == LoginForm:
+            await login(form_data=form)
             form.__dict__.update(msg="Login Successful :)")
             response = templates.TemplateResponse("dashboard/dashboard.html", form.__dict__)
-            print("\n\n")
-            print (response)
-            print (response.context)
-            print("\n\n")
-            print(response.headers)
-            print("\n\n")
-            await login(form_data=form)
             return response
-            # except HTTPException:
-            #     form.__dict__.update(msg="")
-            #     form.__dict__.get("errors").append("Incorrect Email or Password")
-            #     return templates.TemplateResponse("auth/login.html", form.__dict__)
         elif type(form) == UserCreateForm:
             form.__dict__.update(msg="Login Successful :)")
             response = templates.TemplateResponse("dashboard/dashboard.html", form.__dict__)
@@ -69,18 +58,31 @@ async def signup(response: Response, request: Request):
             return response
     return templates.TemplateResponse("/signup", {"request": request})
 
-@app.get('/dashboard')
-async def dashboard(request: Request, current_user: User = Depends(get_current_user)):
-    print(current_user)
-    if current == 'contacts':
-        contacts =  await recordService.list_records(current_user) 
-        print(contacts)
-        pass
-    elif current == 'notes':
-        pass
-    elif current == 'files':
-        pass
-    return current_user, templates.TemplateResponse("dashboard/dashboard.html", {"request": request})
+@api_router.get('/dashboard')
+async def dashboard(request: Request, user: User = Depends(get_current_user)):
+    print('\n\n')
+    print(user)
+    print(user.id)
+    print('\n')
+    rec_list = await recordService.list_records(user)
+    print(rec_list)
+    print('\n\n')
+    try:
+        if request.get("current") == 'contacts':
+            print('\n\n')
+            print(user)
+            print(user.id)
+            contacts =  await recordService.list_records(user) 
+            print(contacts)
+            pass
+        elif current == 'notes':
+            pass
+        elif current == 'files':
+            pass
+        return current_user, templates.TemplateResponse("dashboard/dashboard.html", {"request": request})
+    except Exception as e:
+        print(e)
+        
 
 @app.get('/presentation', response_class=HTMLResponse)
 async def home(request: Request):
@@ -103,7 +105,7 @@ async def app_init():
 
 
 app.include_router(router, prefix=settings.API_V1_STR)
-
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
 # uvicorn app:app --reload
 

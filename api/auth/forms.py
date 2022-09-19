@@ -38,22 +38,16 @@ class LoginForm:
         self.username: Optional[str] = None
         self.password: Optional[str] = None
 
+
     async def load_data(self):
-        print("start function load_data")
         form = await self.request.form()
-        print(type(form))
-        print(form)
         self.username = form.get(
             "loginEmail"
         )  # since outh works on username field we are considering email as username
-        print(self.username)
         self.password = form.get("loginPassword")
-        print(self.password)
+
 
     async def is_valid(self):
-        print("start function is_valid")
-        print(self.username)
-        print(self.password)
         if not self.username or not (self.username.__contains__("@")):
             self.errors.append("Email is required")
         if not self.password or not len(self.password) >= 4:
