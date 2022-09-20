@@ -11,12 +11,14 @@ from models.models_mongo import Emails, Record, Note, Tag, Phones, Records, User
 from api.api_v1.router import router
 from schemas.user_schema import UserAuth
 from services.record_service import RecordService
+from services.user_service import UserService
 from api.auth.forms import LoginForm, UserCreateForm
 from api.auth.jwt import login
 from api.deps.user_deps import get_current_user
 from api.api_v1.hendlers.user import create_user
 from fastapi.security.utils import get_authorization_scheme_param
-
+from fastapi.responses import RedirectResponse
+from uuid import UUID, uuid4
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
@@ -26,7 +28,7 @@ api_router = APIRouter()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 recordService = RecordService()
-
+userService = UserService()
 templates = Jinja2Templates(directory="templates")
 
 
@@ -38,8 +40,14 @@ async def home(request: Request):
 async def home(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
+@app.get('/dashboard')
+async def dashboard(request: Request, response: Response,):
+
+    return templates.TemplateResponse("dashboard/dashboard.html", {"request": request})
+
+
 @app.post('/signup')
-async def signup(response: Response, request: Request):
+async def signup(request: Request):
     if (await request.form()).get("registerName"):
         form = UserCreateForm(request)
     if (await request.form()).get("loginEmail"):
@@ -47,8 +55,13 @@ async def signup(response: Response, request: Request):
     await form.load_data()
     if await form.is_valid():
         if type(form) == LoginForm:
-            await login(form_data=form)
-            form.__dict__.update(msg="Login Successful :)")
+            user = await login(form_data=form)
+            user = await userService.get_user_by_email(user)
+            print(user)
+            
+            # user = userService.authenticate(email=form.email, password=form.password)
+            # form.__dict__.update(msg="Login Successful :)")
+            # print(user)
             response = templates.TemplateResponse("dashboard/dashboard.html", form.__dict__)
             return response
         elif type(form) == UserCreateForm:
@@ -57,31 +70,6 @@ async def signup(response: Response, request: Request):
             await create_user(data=form)
             return response
     return templates.TemplateResponse("/signup", {"request": request})
-
-@api_router.get('/dashboard')
-async def dashboard(request: Request, user: User = Depends(get_current_user)):
-    print('\n\n')
-    print(user)
-    print(user.id)
-    print('\n')
-    rec_list = await recordService.list_records(user)
-    print(rec_list)
-    print('\n\n')
-    try:
-        if request.get("current") == 'contacts':
-            print('\n\n')
-            print(user)
-            print(user.id)
-            contacts =  await recordService.list_records(user) 
-            print(contacts)
-            pass
-        elif current == 'notes':
-            pass
-        elif current == 'files':
-            pass
-        return current_user, templates.TemplateResponse("dashboard/dashboard.html", {"request": request})
-    except Exception as e:
-        print(e)
         
 
 @app.get('/presentation', response_class=HTMLResponse)

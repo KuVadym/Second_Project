@@ -1,13 +1,12 @@
 .containerTab {
-  width: 80%;
-  border: 3px solid black;
+  border: 3px solid #6a8c62;
   border-radius: 0.5em;
   overflow: hidden;
 }
 
 .tabs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .btnNews {
@@ -18,16 +17,16 @@
 }
 
 .btnNews:hover {
-  background-color: #ddd;
+  background-color: #d6edce;
 }
 
 .btnNews.active {
-  background-color: #151515;
+  background-color: #6a8c62;
   color: antiquewhite;
 }
 
 .sections {
-  background-color: #151515;
+  background-color: #6a8c62;
 }
 
 .content.active {
