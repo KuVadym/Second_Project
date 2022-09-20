@@ -15,6 +15,9 @@ reuseable_oauth = OAuth2PasswordBearer(
 
 
 async def get_current_user(token: str = Depends(reuseable_oauth)) -> User:
+    print("get currenuser start \n\n")
+    print(token)
+    print("get currenuser finish \n\n")
     print('start func get_current_user')
     try:
         payload = jwt.decode(
