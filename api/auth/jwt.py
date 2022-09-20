@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Body
+from fastapi import APIRouter, Depends, HTTPException, status, Body, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Any
 from services.user_service import UserService
@@ -17,17 +17,22 @@ auth_router = APIRouter()
 
 
 @auth_router.post('/login', summary="Create access and refresh tokens for user", response_model=TokenSchema)
-async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> Any:
+async def login(response:Response, form_data: OAuth2PasswordRequestForm = Depends()) -> Any:
     user = await UserService.authenticate(email=form_data.username, password=form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Incorrect email or password"
         )
-    
+    access_token = create_access_token(user.user_id)
+    response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
+    print('\n\n')
+    print(access_token)
+    print('\n\n')
     return {
-        "access_token": create_access_token(user.user_id),
+        "access_token": access_token,
         "refresh_token": create_refresh_token(user.user_id),
+        "token_type": "bearer",
     }
 
 

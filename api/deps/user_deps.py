@@ -16,12 +16,17 @@ reuseable_oauth = OAuth2PasswordBearer(
 
 async def get_current_user(token: str = Depends(reuseable_oauth)) -> User:
     print('start func get_current_user')
+    print(token)
     try:
+        print('trying start')
         payload = jwt.decode(
             token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
+        print('payload')
+        print(payload)
         token_data = TokenPayload(**payload)
-        
+        print('token_data')
+        print(token_data)
         if datetime.fromtimestamp(token_data.exp) < datetime.now():
             raise HTTPException(
                 status_code = status.HTTP_401_UNAUTHORIZED,
@@ -29,6 +34,7 @@ async def get_current_user(token: str = Depends(reuseable_oauth)) -> User:
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except(jwt.JWTError, ValidationError):
+        print('exept\n?\n?')
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
@@ -36,7 +42,8 @@ async def get_current_user(token: str = Depends(reuseable_oauth)) -> User:
         )
         
     user = await UserService.get_user_by_id(token_data.sub)
-    
+    print('user')
+    print(user)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
