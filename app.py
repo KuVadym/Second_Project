@@ -48,20 +48,19 @@ templates = Jinja2Templates(directory="templates")
 
 
 
-@api_router.post('/dashboard', response_class=HTMLResponse)
+@app.post('/dashboard', response_class=HTMLResponse)
 async def dashboard(request: Request):
-    print(request)
-    print(request.headers)
-    print(request._cookies)
+    user = await get_current_user(token=(request._cookies.get('access_token')).split(' ')[1])
+    print(user)
     return templates.TemplateResponse("dashboard/dashboard.html", context={"request": request})
 
-@api_router.get('/dashboard', response_class=HTMLResponse)
-async def dashboard(request: Request):
-    print(request)
-    print(request.headers)
-    rec_list = await recordService.list_records(current_user)
-    print(rec_list)
-    return templates.TemplateResponse("dashboard/dashboard.html", context={"request": request})
+# @app.get('/dashboard', response_class=HTMLResponse)
+# async def dashboard(request: Request):
+#     print(request)
+#     print(request.headers)
+#     rec_list = await recordService.list_records(current_user)
+#     print(rec_list)
+#     return templates.TemplateResponse("dashboard/dashboard.html", context={"request": request})
 
 
 
