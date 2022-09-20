@@ -11,6 +11,7 @@ from models.models_mongo import Emails, Record, Note, Tag, Phones, Records, User
 from api.api_v1.router import router
 from schemas.user_schema import UserAuth
 from services.record_service import RecordService
+from services.user_service import UserService
 from api.auth.forms import LoginForm, UserCreateForm
 from api.auth.jwt import login
 from api.deps.user_deps import get_current_user
@@ -42,7 +43,7 @@ api_router = APIRouter()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 recordService = RecordService()
-
+userService = UserService()
 templates = Jinja2Templates(directory="templates")
 
 
@@ -72,8 +73,14 @@ async def home(request: Request):
 async def home(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
+@app.get('/dashboard')
+async def dashboard(request: Request, response: Response,):
+
+    return templates.TemplateResponse("dashboard/dashboard.html", {"request": request})
+
+
 @app.post('/signup')
-async def signup(response: Response, request: Request):
+async def signup(request: Request):
     if (await request.form()).get("registerName"):
         form = UserCreateForm(request)
     if (await request.form()).get("loginEmail"):
