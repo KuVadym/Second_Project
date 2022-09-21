@@ -21,9 +21,6 @@ async def b_day_list(days, current_user: User = Depends(get_current_user)):
 
 @record_router.get('/search', summary="Search record by user input", response_model=List[RecordOut])
 async def search(data: str, current_user: User = Depends(get_current_user)):
-    print("search starts")
-    print(data)
-    print(current_user)
     return await RecordService.search_record(current_user, data)
 
 

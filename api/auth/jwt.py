@@ -26,10 +26,7 @@ async def login(response:Response, form_data: OAuth2PasswordRequestForm = Depend
         )
     access_token = create_access_token(user.user_id)
     response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
-    print('\n\n')
-    print(access_token)
-    print('\n\n')
-    return {
+    return { "user": user,
         "access_token": access_token,
         "refresh_token": create_refresh_token(user.user_id),
         "token_type": "bearer",

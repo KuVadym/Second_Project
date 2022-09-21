@@ -1,3 +1,4 @@
+from multiprocessing import context
 import uvicorn
 from http import server
 from fastapi import FastAPI, Request, Form, Response, Depends, APIRouter, responses
@@ -20,6 +21,7 @@ from fastapi.security.utils import get_authorization_scheme_param
 import time
 from threading import Thread
 from scrap.scrap import scraping
+from models.models_mongo import User
 
 valute = {}
 news = {}
@@ -49,10 +51,10 @@ templates = Jinja2Templates(directory="templates")
 
 
 
-@app.post('/dashboard', response_class=HTMLResponse)
+@api_router.get('/dashboard', response_class=HTMLResponse)
 async def dashboard(request: Request):
-    user = await get_current_user(token=(request._cookies.get('access_token')).split(' ')[1])
-    print(user)
+    rec = await RecordService.list_records()
+    print(rec)
     return templates.TemplateResponse("dashboard/dashboard.html", context={"request": request})
 
 
