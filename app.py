@@ -55,13 +55,6 @@ async def dashboard(request: Request):
     print(user)
     return templates.TemplateResponse("dashboard/dashboard.html", context={"request": request})
 
-# @app.get('/dashboard', response_class=HTMLResponse)
-# async def dashboard(request: Request):
-#     print(request)
-#     print(request.headers)
-#     rec_list = await recordService.list_records(current_user)
-#     print(rec_list)
-#     return templates.TemplateResponse("dashboard/dashboard.html", context={"request": request})
 
 
 
@@ -72,6 +65,22 @@ async def home(request: Request):
 @app.get('/signup', response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
+
+@app.get('/contacts', response_class=HTMLResponse)
+async def contacts(request: Request):
+    # user = await get_current_user(token=)
+    records = await RecordService.list_records()
+    print(records)
+    return templates.TemplateResponse("contacts/contacts.html", {"request": request})
+
+@app.get('/notes', response_class=HTMLResponse)
+async def notes(request: Request):
+    return templates.TemplateResponse("notes/notes.html", {"request": request})
+
+@app.get('/files', response_class=HTMLResponse)
+async def files(request: Request):
+    
+    return templates.TemplateResponse("files/files.html", {"request": request})
 
 @app.get('/dashboard')
 async def dashboard(request: Request, response: Response,):
