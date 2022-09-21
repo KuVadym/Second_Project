@@ -7,7 +7,7 @@ from uuid import UUID
 
 class RecordService:
     @staticmethod
-    async def list_records(user: User) -> List[Records]:
+    async def list_records(user:User) -> List[Records]:
         records = await Records.find(Records.owner.id == user.id).to_list()
         return records
  

@@ -89,7 +89,7 @@ def dropbox_get_link():
 
 
 
-dropbox_upload_file(r'C:\Users\kuzik\Desktop', '2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg', f'/2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg')
-sort_files = order_files()
-print(sort_files)
+# dropbox_upload_file(r'C:\Users\kuzik\Desktop', '2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg', f'/2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg')
+# sort_files = order_files()
+# print(sort_files)
 # 2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg

@@ -50,11 +50,10 @@ templates = Jinja2Templates(directory="templates")
 
 
 
-@api_router.post('/dashboard', response_class=HTMLResponse)
-async def dashboard(request: Request, user: User = Depends(get_current_user)):
-    print(request._cookies)
-    user = await get_current_user(token=(request._cookies.get('access_token')).split(' ')[1].strip())
-    print(user)
+@api_router.get('/dashboard', response_class=HTMLResponse)
+async def dashboard(request: Request):
+    rec = await RecordService.list_records()
+    print(rec)
     return templates.TemplateResponse("dashboard/dashboard.html", context={"request": request})
 
 # @app.get('/dashboard', response_class=HTMLResponse)
@@ -71,32 +70,32 @@ async def dashboard(request: Request, user: User = Depends(get_current_user)):
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "valute": valute, "news": news, "sport": sport, "weather": weather})
 
-@app.get('/signup', response_class=HTMLResponse)
-async def home(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+# @app.get('/signup', response_class=HTMLResponse)
+# async def home(request: Request):
+#     return templates.TemplateResponse("login.html", {"request": request})
 
-@app.post('/signup')
-async def signup(response: Response, request: Request):
-    if (await request.form()).get("registerName"):
-        form = UserCreateForm(request)
-    if (await request.form()).get("loginEmail"):
-        form = LoginForm(request) 
-    await form.load_data()
-    if await form.is_valid():
-        if type(form) == LoginForm:
-            form.__dict__.update(msg="Login Successful :)")
-            response = templates.TemplateResponse("dashboard/dashboard.html", form.__dict__)
-            token = await login(response=response, form_data=form)
-            print(token.get("access_token"))
-            user: User
-            user = token.get("user")
-            return responses.RedirectResponse('/api/v1/dashboard')
-        elif type(form) == UserCreateForm:
-            form.__dict__.update(msg="Login Successful :)")
-            response = templates.TemplateResponse("dashboard/dashboard.html", form.__dict__)
-            await create_user(data=form)
-            return response
-    return templates.TemplateResponse("/signup", context={"request": request})
+# @app.post('/signup')
+# async def signup(response: Response, request: Request):
+#     if (await request.form()).get("registerName"):
+#         form = UserCreateForm(request)
+#     if (await request.form()).get("loginEmail"):
+#         form = LoginForm(request) 
+#     await form.load_data()
+#     if await form.is_valid():
+#         if type(form) == LoginForm:
+#             form.__dict__.update(msg="Login Successful :)")
+#             response = templates.TemplateResponse("dashboard/dashboard.html", form.__dict__)
+#             token = await login(response=response, form_data=form)
+#             print(token.get("access_token"))
+#             user: User
+#             user = token.get("user")
+#             return responses.RedirectResponse('/api/v1/dashboard')
+#         elif type(form) == UserCreateForm:
+#             form.__dict__.update(msg="Login Successful :)")
+#             response = templates.TemplateResponse("dashboard/dashboard.html", form.__dict__)
+#             await create_user(data=form)
+#             return response
+#     return templates.TemplateResponse("/signup", context={"request": request})
 
 
         
