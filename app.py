@@ -1,3 +1,4 @@
+from multiprocessing import context
 import uvicorn
 from http import server
 from fastapi import FastAPI, Request, Form, Response, Depends, APIRouter, responses
@@ -19,6 +20,7 @@ from fastapi.security.utils import get_authorization_scheme_param
 import time
 from threading import Thread
 from scrap.scrap import scraping
+from models.models_mongo import User
 
 valute = {}
 news = {}
@@ -48,9 +50,10 @@ templates = Jinja2Templates(directory="templates")
 
 
 
-@app.post('/dashboard', response_class=HTMLResponse)
-async def dashboard(request: Request):
-    user = await get_current_user(token=(request._cookies.get('access_token')).split(' ')[1])
+@api_router.post('/dashboard', response_class=HTMLResponse)
+async def dashboard(request: Request, user: User = Depends(get_current_user)):
+    print(request._cookies)
+    user = await get_current_user(token=(request._cookies.get('access_token')).split(' ')[1].strip())
     print(user)
     return templates.TemplateResponse("dashboard/dashboard.html", context={"request": request})
 
@@ -83,7 +86,10 @@ async def signup(response: Response, request: Request):
         if type(form) == LoginForm:
             form.__dict__.update(msg="Login Successful :)")
             response = templates.TemplateResponse("dashboard/dashboard.html", form.__dict__)
-            await login(response=response, form_data=form)
+            token = await login(response=response, form_data=form)
+            print(token.get("access_token"))
+            user: User
+            user = token.get("user")
             return responses.RedirectResponse('/api/v1/dashboard')
         elif type(form) == UserCreateForm:
             form.__dict__.update(msg="Login Successful :)")

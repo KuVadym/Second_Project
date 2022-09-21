@@ -9,24 +9,17 @@ from services.user_service import UserService
 from schemas.auth_schema import TokenPayload
 
 reuseable_oauth = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.API_V1_STR}/auth/login",
+    tokenUrl=f"/signup",
     scheme_name="JWT"
 )
 
 
 async def get_current_user(token: str = Depends(reuseable_oauth)) -> User:
-    print('start func get_current_user')
-    print(token)
     try:
-        print('trying start')
         payload = jwt.decode(
             token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
-        print('payload')
-        print(payload)
         token_data = TokenPayload(**payload)
-        print('token_data')
-        print(token_data)
         if datetime.fromtimestamp(token_data.exp) < datetime.now():
             raise HTTPException(
                 status_code = status.HTTP_401_UNAUTHORIZED,
