@@ -50,11 +50,10 @@ userService = UserService()
 templates = Jinja2Templates(directory="templates")
 
 
-
-
 @api_router.post('/dashboard', response_class=HTMLResponse)
 async def dashboard(request: Request):
     token = request._cookies.get("access_token").split(" ")[1]
+    print(token)
     user = await get_current_user(token)
     x = await list(user)
     print(x)
@@ -67,7 +66,17 @@ async def dashboard(request: Request):
 
 @app.get('/', response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "valute": valute, "news": news, "sport": sport, "weather": weather})
+    return templates.TemplateResponse("index.html", {"request": request, "valute": valute, "news": news, "sport": sport, "weather": weather,})
+
+@app.post('/',response_class=HTMLResponse)
+async def home(request: Request):
+    token = request._cookies.get("access_token").split(" ")[1]
+    print(token)
+    user = await get_current_user(token)
+    print(user.__dict__)
+    x = await list(user)
+    print(x)
+    return templates.TemplateResponse("index.html", {"request": request, "valute": valute, "news": news, "sport": sport, "weather": weather, "user": user.__dict__})
 
 @app.get('/signup', response_class=HTMLResponse)
 async def home(request: Request):
@@ -75,14 +84,33 @@ async def home(request: Request):
 
 @app.get('/contacts', response_class=HTMLResponse)
 async def contacts(request: Request):
-    # user = await get_current_user(token=)
-    records = await RecordService.list_records()
-    print(records)
-    return templates.TemplateResponse("contacts/contacts.html", {"request": request})
+    token = request._cookies.get("access_token").split(" ")[1]
+    user = await get_current_user(token)
+
+    if not user:
+        return responses.RedirectResponse('/signup')
+
+    print(user.__dict__)
+    list_records = await list(user)
+
+    for contact in list_records:
+        print(contact)
+    return templates.TemplateResponse("contacts/contacts.html", {"request": request, "user": user.__dict__, "list":list_records})
 
 @app.get('/notes', response_class=HTMLResponse)
 async def notes(request: Request):
-    return templates.TemplateResponse("notes/notes.html", {"request": request})
+    token = request._cookies.get("access_token").split(" ")[1]
+    user = await get_current_user(token)
+
+    if not user:
+        return responses.RedirectResponse('/signup')
+
+    print(user.__dict__)
+    list_records = await list(user)
+
+    for contact in list_records:
+        print(contact)
+    return templates.TemplateResponse("notes/notes.html", {"request": request, "user": user.__dict__, "list":list_records})
 
 @app.get('/files', response_class=HTMLResponse)
 async def files(request: Request):
@@ -107,8 +135,8 @@ async def signup(request: Request):
             form.__dict__.update(msg="Login Successful :)")
             response = templates.TemplateResponse("dashboard/dashboard.html", form.__dict__)
             token = await login(response=response, form_data=form)
-            redirectresponse = responses.RedirectResponse('/api/v1/dashboard')
-            # redirectresponse.headers["Authorization"] = f'Bearer {token.get("access_token")}'
+            redirectresponse = responses.RedirectResponse('/')
+            
             redirectresponse.set_cookie(key="access_token", value=f'Bearer {token.get("access_token")}')
             return redirectresponse
         elif type(form) == UserCreateForm:

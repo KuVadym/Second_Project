@@ -5,11 +5,133 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+      crossorigin="anonymous"
+    />
+    <link href="{{ url_for('static', path='styles.css') }}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
       rel="icon"
       type="image/x-icon"
       href="{{ url_for('static', path='image/owl.ico') }}"
     />
-    <title>Contacts</title>
+    <style>
+      body {
+        height: 100vh;
+        background: linear-gradient(25.06deg, #e4f1ed 20.8%, #ffffff 66.53%);
+      }
+      .btnIcon:hover > i,
+      .btnIcon:focus > i {
+        color: #007b5e;
+      }
+    </style>
+    <title>POCKET MEMORY</title>
   </head>
-  <body></body>
+  <body>
+    <section class="nav-section d-flex w-100">
+      {% include 'components/nav.html' %}
+    </section>
+    <section class="contacts">
+      <div>
+        <button
+          type="button"
+          class="btn btn-default btn-custom"
+          data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop"
+        >
+          Add Contacts
+        </button>
+        {% include 'components/modal.html' %}
+      </div>
+      <div class="w-100">
+        {% if list %}
+        <div>
+          <table class="table align-middle mb-0 bg-white">
+            <thead class="bg-light">
+              <tr>
+                <th>Name</th>
+                <th>Phones</th>
+                <th>Address</th>
+                <th>Birth Day</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for contact in list %}
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="ms-3">
+                      <p class="fw-bold mb-1">{{contact.name}}</p>
+                      {%for listEmail in contact.emails %}
+                      <p class="text-muted mb-0">{{listEmail.email}}</p>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  {%for listPhones in contact.phones %}
+                  <p class="text-muted mb-0">{{listPhones.phone}}</p>
+                  {% endfor %}
+                </td>
+                <td>
+                  {% if contact.address %}
+                  <p class="text-muted mb-0">{{contact.address}}</p>
+                  {% else %}
+                  <p class="text-muted mb-0">Not added</p>
+                  {% endif %}
+                </td>
+                <td>
+                  <p class="text-muted mb-0">
+                    {{contact.birth_date.strftime('%Y-%m-%d')}}
+                  </p>
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btnIcon btn-rounded"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop"
+                  >
+                    <i
+                      class="fa fa-pencil-square-o fa-2x"
+                      aria-hidden="true"
+                    ></i>
+                  </button>
+                  <a
+                    href="/api/v1/records/{{contact.id}}"
+                    type="button"
+                    class="btn btnIcon btn-rounded"
+                    id="id-1"
+                  >
+                    <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="d-flex w-100 mx-auto">
+          <h2>You don't have any contacts</h2>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+    <script
+      src="{{ url_for('static', path='/js/modal.js') }}"
+      type="module"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
+      integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
