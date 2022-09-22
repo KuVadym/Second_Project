@@ -22,6 +22,7 @@ import time
 from threading import Thread
 from scrap.scrap import scraping
 from models.models_mongo import User
+from api.api_v1.hendlers.record import list
 
 valute = {}
 news = {}
@@ -51,10 +52,14 @@ templates = Jinja2Templates(directory="templates")
 
 
 
-@api_router.get('/dashboard', response_class=HTMLResponse)
+@api_router.post('/dashboard', response_class=HTMLResponse)
 async def dashboard(request: Request):
-    rec = await RecordService.list_records()
-    print(rec)
+    token = request._cookies.get("access_token").split(" ")[1]
+    user = await get_current_user(token)
+    x = await list(user)
+    print(x)
+    # rec = await Records.find(Records.owner.id == user.id).to_list()
+    # print(rec)
     return templates.TemplateResponse("dashboard/dashboard.html", context={"request": request})
 
 
@@ -84,10 +89,10 @@ async def files(request: Request):
     
     return templates.TemplateResponse("files/files.html", {"request": request})
 
-@app.get('/dashboard')
-async def dashboard(request: Request, response: Response,):
-
-    return templates.TemplateResponse("dashboard/dashboard.html", {"request": request})
+# @app.get('/dashboard')
+# async def dashboard(request: Request, response: Response,):
+#     rec = await recordService.list_records()
+#     return templates.TemplateResponse("dashboard/dashboard.html", {"request": request})
 
 
 @app.post('/signup')
@@ -101,8 +106,11 @@ async def signup(request: Request):
         if type(form) == LoginForm:
             form.__dict__.update(msg="Login Successful :)")
             response = templates.TemplateResponse("dashboard/dashboard.html", form.__dict__)
-            await login(response=response, form_data=form)
-            return responses.RedirectResponse('/api/v1/dashboard')
+            token = await login(response=response, form_data=form)
+            redirectresponse = responses.RedirectResponse('/api/v1/dashboard')
+            # redirectresponse.headers["Authorization"] = f'Bearer {token.get("access_token")}'
+            redirectresponse.set_cookie(key="access_token", value=f'Bearer {token.get("access_token")}')
+            return redirectresponse
         elif type(form) == UserCreateForm:
             form.__dict__.update(msg="Login Successful :)")
             response = templates.TemplateResponse("dashboard/dashboard.html", form.__dict__)
