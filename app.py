@@ -14,7 +14,7 @@ from schemas.record_schema import RecordAuth
 from schemas.user_schema import UserAuth
 from services.record_service import RecordService
 from services.user_service import UserService
-from api.auth.forms import ContactDeleteForm, LoginForm, UserCreateForm, ContactCreateForm
+from api.auth.forms import ContactDeleteForm, ContactUpdateForm, LoginForm, UserCreateForm, ContactCreateForm
 from api.auth.jwt import login
 from api.deps.user_deps import get_current_user
 from api.api_v1.hendlers.user import create_user
@@ -23,7 +23,7 @@ import time
 from threading import Thread
 from scrap.scrap import scraping
 from models.models_mongo import User
-from api.api_v1.hendlers.record import delete, list, create_record
+from api.api_v1.hendlers.record import delete, list, create_record, update
 
 valute = {}
 news = {}
@@ -97,22 +97,29 @@ async def contacts(request: Request):
 
 @app.post('/contacts', response_class=HTMLResponse)
 async def contacts(request: Request):
-    # if await (await request.form()).get("name"):
-    form = ContactCreateForm(request)
-    # if await (await request.form()).get("code"):
-    #     form = ContactDeleteForm(request)
+    if (await request.form()).get("name"):
+        form = ContactCreateForm(request)
+    if (await request.form()).get("delete_code"):
+        form = ContactDeleteForm(request)
+    if (await request.form()).get("new_name"):
+        form = ContactUpdateForm(request)    
     await form.load_data()
+    print(form.__dict__)
     token = request._cookies.get("access_token").split(" ")[1]
     user = await get_current_user(token)
     if not user:
         return responses.RedirectResponse('/signup')
     if type(form) == ContactCreateForm:
-        data = RecordAuth(name=form.name, birth_date=form.birth_date, address=form.address, emails=[Emails(email=form.email)], phones=[Phones(phone=form.phones)])
-        new_contact = await create_record(data=data ,current_user=user)
-    if type(form) == ContactDeleteForm:
-        delete(record_id=form.id, current_user=user)
-    
+        if await form.is_valid():
+            data = RecordAuth(name=form.name, birth_date=form.birth_date, address=form.address, emails=[Emails(email=form.email)], phones=[Phones(phone=form.phones)])
+            new_contact = await create_record(data=data ,current_user=user)
+        else:
+            pass 
     list_records = await list(user)
+    if type(form) == ContactUpdateForm:
+        update(record_id=form.id, current_user=user) # form.id()
+    if type(form) == ContactDeleteForm:
+        await delete(record_id=form.id, current_user=user)
     return templates.TemplateResponse("contacts/contacts.html", {"request": request, "user": user.__dict__, "list":list_records})
 
 
@@ -149,7 +156,6 @@ async def signup(request: Request):
             response = templates.TemplateResponse("dashboard/dashboard.html", form.__dict__)
             token = await login(response=response, form_data=form)
             redirectresponse = responses.RedirectResponse('/')
-            
             redirectresponse.set_cookie(key="access_token", value=f'Bearer {token.get("access_token")}')
             return redirectresponse
         elif type(form) == UserCreateForm:
@@ -158,13 +164,12 @@ async def signup(request: Request):
             await create_user(data=form)
             return response
     return templates.TemplateResponse("/signup", context={"request": request})
-
-
         
 
 @app.get('/presentation', response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("presentation.html", {"request": request})
+
 
 @app.on_event("startup")
 async def app_init():
@@ -191,4 +196,3 @@ if __name__ == "__main__":
     config = uvicorn.Config("app:app", port=5000, log_level="info", reload=True)
     server = uvicorn.Server(config)
     server.run()
-    
