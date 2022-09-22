@@ -16,23 +16,42 @@
       href="{{ url_for('static', path='our-team.css') }}"
       rel="stylesheet"
     />
-    <title>Document</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{ url_for('static', path='image/owl.ico') }}"
+    />
+    <title>POCKET MEMORY</title>
   </head>
   <body>
     <!-- Hero Section -->
     <section class="position-relative">
-      <div class="homeContainer d-flex align-items-center">
-        <div class="p-5 text-white w-50">
-          <h1 class="display-2 fade-out">
-            Welcome to our personal helper POCKET MEMORY
+      <ul
+        class="nav justify-content-center nav-style pt-5 border-bottom border-light"
+      >
+        <li class="nav-item border-1">
+          <a class="nav-link link" href="/contacts">Contacts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link" href="/notes">Notes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link" href="/files">Files</a>
+        </li>
+      </ul>
+      <div class="homeContainer d-flex align-items-start pt-5">
+        <div class="px-5 pt-5 text-white w-50">
+          <h1 class="display-5 fade-out">
+            Welcome to our personal helper
+            <span class="title">POCKET MEMORY</span>
           </h1>
-          <div class="d-flex gap-4">
-            <a
+          <div class="d-flex gap-4 mt-5">
+            <!-- <a
               class="btn btn-primary btn-dark btn-lg"
               href="/signup"
               role="button"
               >Signup</a
-            >
+            > -->
             <a
               class="btn btn-primary btn-light btn-lg"
               href="/presentation"
@@ -42,7 +61,7 @@
           </div>
         </div>
       </div>
-      <div class="position-absolute top-0 m-5">
+      <div class="position-absolute top-0 m-3">
         <img src="../static/image/owl.svg" alt="owl" />
       </div>
       <div class="position-absolute top-0 end-0 m-5">
@@ -164,7 +183,7 @@
                         />
                       </p>
                       <h4 class="card-title">Serhii Plys</h4>
-                      <p class="card-text">Backend, Scrapping</p>
+                      <p class="card-text">Scrapping</p>
                     </div>
                   </div>
                 </div>

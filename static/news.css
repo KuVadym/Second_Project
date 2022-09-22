@@ -1,5 +1,5 @@
 .containerTab {
-  border: 3px solid #6a8c62;
+  border: 3px solid #2e7a48;
   border-radius: 0.5em;
   overflow: hidden;
 }
@@ -21,22 +21,22 @@
 }
 
 .btnNews.active {
-  background-color: #6a8c62;
-  color: antiquewhite;
+  background-color: #2e7a48;
+  color: white;
 }
 
 .sections {
-  background-color: #6a8c62;
+  background-color: #2e7a48;
 }
 
 .content.active {
   padding: 2rem;
   display: block;
-  color: antiquewhite;
+  color: white;
 }
 
 .content.active > h2 {
-  color: antiquewhite;
+  color: white;
 }
 
 h2 {

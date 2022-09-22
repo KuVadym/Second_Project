@@ -122,10 +122,28 @@ body {
 
 .homeContainer {
   width: 100%;
-  aspect-ratio: 1.8;
+  aspect-ratio: 2;
   background-color: #151515;
   background-image: url("./image/bg-icon.svg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 88% 0%;
+}
+
+.nav-style {
+  background-color: #151515;
+}
+
+.link {
+  color: #fff;
+}
+
+.link:hover,
+.link:focus {
+  color: #007b5e;
+}
+
+.title {
+  font-weight: 600;
+  color: #007b5e;
 }
