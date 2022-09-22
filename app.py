@@ -75,7 +75,7 @@ async def home(request: Request):
 async def home(request: Request):
     token = request._cookies.get("access_token").split(" ")[1]
     user = await get_current_user(token)
-    print(user.__dict__)
+ 
     x = await list(user)
     print(x)
     return templates.TemplateResponse("index.html", {"request": request, "valute": valute, "news": news, "sport": sport, "weather": weather, "user": user.__dict__})
@@ -92,10 +92,9 @@ async def contacts(request: Request):
     if not user:
         return responses.RedirectResponse('/signup')
 
-    print(user.__dict__)
+ 
     list_records = await list(user)
-    # for contact in list_records:
-    #     print(contact)
+
     return templates.TemplateResponse("contacts/contacts.html", {"request": request, "user": user.__dict__, "list":list_records, "square": square})
 
 
