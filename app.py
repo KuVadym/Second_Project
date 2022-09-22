@@ -10,10 +10,11 @@ from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 from models.models_mongo import Emails, Record, Note, Tag, Phones, Records, User
 from api.api_v1.router import router
+from schemas.record_schema import RecordAuth
 from schemas.user_schema import UserAuth
 from services.record_service import RecordService
 from services.user_service import UserService
-from api.auth.forms import LoginForm, UserCreateForm
+from api.auth.forms import ContactDeleteForm, LoginForm, UserCreateForm, ContactCreateForm
 from api.auth.jwt import login
 from api.deps.user_deps import get_current_user
 from api.api_v1.hendlers.user import create_user
@@ -22,7 +23,7 @@ import time
 from threading import Thread
 from scrap.scrap import scraping
 from models.models_mongo import User
-from api.api_v1.hendlers.record import list
+from api.api_v1.hendlers.record import delete, list, create_record
 
 valute = {}
 news = {}
@@ -53,7 +54,6 @@ templates = Jinja2Templates(directory="templates")
 @api_router.post('/dashboard', response_class=HTMLResponse)
 async def dashboard(request: Request):
     token = request._cookies.get("access_token").split(" ")[1]
-    print(token)
     user = await get_current_user(token)
     x = await list(user)
     print(x)
@@ -71,7 +71,6 @@ async def home(request: Request):
 @app.post('/',response_class=HTMLResponse)
 async def home(request: Request):
     token = request._cookies.get("access_token").split(" ")[1]
-    print(token)
     user = await get_current_user(token)
     print(user.__dict__)
     x = await list(user)
@@ -92,24 +91,38 @@ async def contacts(request: Request):
 
     print(user.__dict__)
     list_records = await list(user)
-
     for contact in list_records:
         print(contact)
     return templates.TemplateResponse("contacts/contacts.html", {"request": request, "user": user.__dict__, "list":list_records})
+
+@app.post('/contacts', response_class=HTMLResponse)
+async def contacts(request: Request):
+    # if await (await request.form()).get("name"):
+    form = ContactCreateForm(request)
+    # if await (await request.form()).get("code"):
+    #     form = ContactDeleteForm(request)
+    await form.load_data()
+    token = request._cookies.get("access_token").split(" ")[1]
+    user = await get_current_user(token)
+    if not user:
+        return responses.RedirectResponse('/signup')
+    if type(form) == ContactCreateForm:
+        data = RecordAuth(name=form.name, birth_date=form.birth_date, address=form.address, emails=[Emails(email=form.email)], phones=[Phones(phone=form.phones)])
+        new_contact = await create_record(data=data ,current_user=user)
+    if type(form) == ContactDeleteForm:
+        delete(record_id=form.id, current_user=user)
+    
+    list_records = await list(user)
+    return templates.TemplateResponse("contacts/contacts.html", {"request": request, "user": user.__dict__, "list":list_records})
+
 
 @app.get('/notes', response_class=HTMLResponse)
 async def notes(request: Request):
     token = request._cookies.get("access_token").split(" ")[1]
     user = await get_current_user(token)
-
     if not user:
         return responses.RedirectResponse('/signup')
-
-    print(user.__dict__)
     list_records = await list(user)
-
-    for contact in list_records:
-        print(contact)
     return templates.TemplateResponse("notes/notes.html", {"request": request, "user": user.__dict__, "list":list_records})
 
 @app.get('/files', response_class=HTMLResponse)
