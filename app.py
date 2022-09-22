@@ -30,6 +30,10 @@ news = {}
 sport = {}
 weather = {}
 
+def square(a):
+    print(a)
+    return a ** 2
+
 def main_scrap():
     while True:
         global valute, news, sport, weather
@@ -49,7 +53,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 recordService = RecordService()
 userService = UserService()
 templates = Jinja2Templates(directory="templates")
-
 
 @api_router.post('/dashboard', response_class=HTMLResponse)
 async def dashboard(request: Request):
@@ -91,9 +94,16 @@ async def contacts(request: Request):
 
     print(user.__dict__)
     list_records = await list(user)
-    for contact in list_records:
-        print(contact)
-    return templates.TemplateResponse("contacts/contacts.html", {"request": request, "user": user.__dict__, "list":list_records})
+    # for contact in list_records:
+    #     print(contact)
+    return templates.TemplateResponse("contacts/contacts.html", {"request": request, "user": user.__dict__, "list":list_records, "square": square})
+
+
+@app.get('/delete/{id}', response_class=HTMLResponse)
+async def contacts(request: Request):
+    print(id)
+    return
+
 
 @app.post('/contacts', response_class=HTMLResponse)
 async def contacts(request: Request):

@@ -19,7 +19,7 @@
         ></button>
       </div>
       <div class="modal-body">
-        <form action="#" method="POST">
+        <form action="/" method="POST">
           <!-- Name input -->
           <div class="form-outline mb-4">
             <input
@@ -61,6 +61,8 @@
               id="phones"
               name="phones"
               class="form-control"
+              required
+              pattern="^[0-9]{10}$"
             />
             <label class="form-label" for="phones"
               >Phones</label

@@ -20,6 +20,25 @@
       .body {
         background-color: #fff5df;
       }
+      .back-to-home {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+      }
+      .back-to-home-title {
+        font-weight: 700;
+        position: absolute;
+        bottom: -50%;
+        left: -50%;
+        transform: translate(170%, -144%);
+        border: 3px solid #007b5e;
+        border-radius: 14px;
+        padding: 16px 32px;
+        color: #007b5e;
+      }
     </style>
     <title>Login</title>
   </head>
@@ -30,12 +49,13 @@
           <div
             class="col-md-9 col-lg-6 col-xl-5 d-flex justify-content-center align-items-center"
           >
-            <a href="/">
+            <a href="/" class="back-to-home">
               <img
                 src="{{ url_for('static', path='/image/big-owl.svg') }}"
                 class="img-fluid"
                 alt="Sample image"
               />
+              <span class="back-to-home-title"> Home </span>
             </a>
           </div>
           <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">

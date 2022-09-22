@@ -46,7 +46,8 @@
         >
           Add Contacts
         </button>
-        {% include 'components/modal.html' %}
+        {% include 'components/modal.html' %} {% include
+        'components/delete-modal.html' %}
       </div>
       <div class="w-100">
         {% if list %}
@@ -104,10 +105,9 @@
                     ></i>
                   </button>
                   <a
-                    href="/api/v1/records/{{contact.id}}"
+                    href="/delete/{{contact.id}}"
                     type="button"
                     class="btn btnIcon btn-rounded"
-                    id="id-1"
                   >
                     <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
                   </a>
@@ -124,6 +124,19 @@
         {% endif %}
       </div>
     </section>
+    <!-- <script type="text/javascript">
+      const btn = document.querySelectorAll(".btn-d");
+
+      btn.forEach((btnItem, idx) => {
+        btnItem.addEventListener("click", (e) => {
+          const uuid = e.currentTarget.dataset.delete;
+          return fetch(`http://localhost:8000/contacts`, {
+            method: "POST",
+            body: JSON.stringify({ uuid: uuid }),
+          });
+        });
+      });
+    </script> -->
     <script
       src="{{ url_for('static', path='/js/modal.js') }}"
       type="module"
