@@ -8,7 +8,9 @@ COPY ./requirements.txt /requirements.txt
 WORKDIR /
 
 # install libfi library
-RUN apk add libffi-dev
+RUN apk add --update --no-cache --virtual .tmp-build-deps \
+    gcc libc-dev linux-headers postgresql-dev \
+    && apk add libffi-dev
 
 # install the dependencies and packages in the requirements file
 RUN pip install -r requirements.txt
@@ -16,7 +18,11 @@ RUN pip install -r requirements.txt
 # copy every content from the local file to the image
 COPY . /
 
-# configure the container to run in an executed manner
-ENTRYPOINT [ "unicorn" ]
+# set environmetn variables
+ENV JWT_SECRET_KEY=qwerty
+ENV JWT_REFRESH_SECRET_KEY=ytrew
+ENV MONGO_CONNECTION_STRING=mongodb+srv://VadymKu:k*V190821@cluster0.nrqiq.mongodb.net/?retryWrites=true&w=majority
 
-CMD ["app:app --reload" ]
+ENTRYPOINT ["python"]
+
+CMD ["app.py" ]
