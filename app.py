@@ -101,7 +101,7 @@ async def contacts(request: Request):
 
  
     list_records = await list(user)
-
+    
     return templates.TemplateResponse("contacts/contacts.html", {"request": request, "user": user.__dict__, "list":list_records,})
 
 
