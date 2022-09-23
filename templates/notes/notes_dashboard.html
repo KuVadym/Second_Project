@@ -71,20 +71,20 @@ crossorigin="anonymous"
                     </div>
                     <div class="d-flex align-items-center">
                         <span class="mr-1"><i class="fa fa-star favourite-note"></i></span>
-                        <span class="mr-1"><i class="fa fa-trash remove-note">
-                            <form action="/notes" method="POST" class="d-none">
-                                <input type="hidden" name="note-id" value="{{note.id}}">
-                             <button
-                             
-                             type="submit"
-                               value="{{note.id}}"
-                               type="button"
-                               class="btn btnIcon btn-rounded"
-                             >
-                               
-                             </button>
-                             </form>
-                        </i></span>
+                        <span class="mr-1">
+                        <form action="/note" method="POST">
+                            <input type="hidden" name="contact-id" value="{{note.id}}">
+                         <button
+                         
+                         type="submit"
+                           value="{{note.id}}"
+                           type="button"
+                           class="btn btnIcon btn-rounded"
+                         >
+                           <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+                         </button>
+                         </form>
+                        </span>
                         <div class="ml-auto">
                             <div class="category-selector btn-group">
                                 <a class="nav-link dropdown-toggle category-dropdown label-group p-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">
@@ -127,6 +127,7 @@ crossorigin="anonymous"
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
+                
                 <div class="modal-body">
                     <div class="notes-box">
                         <div class="notes-content">
