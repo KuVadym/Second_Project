@@ -37,7 +37,7 @@
       {% include 'components/nav.html' %}
     </section>
     <section class="contacts">
-      <form method="post" action="/files" class="d-flex align-content-center justify-content-center gap-3">
+      <form method="post" action="/files" enctype="multipart/form-data" class="d-flex align-content-center justify-content-center gap-3">
         <div class="w-50">
           <label for="formFileLg" class="form-label">Upload your Files</label>
           <input class="form-control" name="upload" id="formFileLg" type="file" accept="image/*,.pdf,.doc," size="">
@@ -46,9 +46,13 @@
           <button type="submit" class="btn btn-large btn-primary h-50 mt-auto">Upload</button>
      
       </form>
+      <form action="/uploadfiles/" enctype="multipart/form-data" method="post">
+        <input name="files" type="file" multiple>
+        <input type="submit">
+        </form>
 
     </section>
-    <script>
+    <!-- <script>
       const input = document.getElementById('formFileLg')
 
       input.addEventListener('change', (event) => {
@@ -61,7 +65,7 @@
             }
         }
       })
-    </script>
+    </script> -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
       integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
