@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime
 from typing import Optional
 from beanie import Document, Indexed, Link, before_event, Replace, Insert
 from pydantic import BaseModel, EmailStr, Field
@@ -116,4 +116,5 @@ class Records(Document):
 
 
 class File(Document): # Now I don't know how it shoud work 
-    file = str
+    name = str
+    link = str

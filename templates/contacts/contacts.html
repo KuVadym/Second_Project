@@ -70,14 +70,19 @@
                     <div class="ms-3">
                       <p class="fw-bold mb-1">{{contact.name}}</p>
                       {%for listEmail in contact.emails %}
-                      <p class="text-muted mb-0">{{listEmail.email}}</p>
+                      <a href="mailto:{{listEmail.email}}">
+
+                        <p class="text-muted mb-0">{{listEmail.email}}</p>
+                      </a>
                       {% endfor %}
                     </div>
                   </div>
                 </td>
                 <td>
                   {%for listPhones in contact.phones %}
+                  <a href="tel:{{listPhones.phone}}">
                   <p class="text-muted mb-0">{{listPhones.phone}}</p>
+                </a>
                   {% endfor %}
                 </td>
                 <td>
@@ -124,22 +129,24 @@
               id="name"
               name="new_name"
               class="form-control"
-              
+              value="{{contact.name}}"
             />
             <label class="form-label" for="name">Name</label>
           </div>
 
           <!-- Email input -->
+          {%for listEmail in contact.emails %}
           <div class="form-outline mb-4">
             <input
               type="email"
               id="emails"
               name="new_emails"
               class="form-control"
+              value="{{listEmail.email}}"
             />
             <label class="form-label" for="emails">Email</label>
           </div>
-
+          {% endfor %}
           <!-- Password input -->
           <div class="form-outline mb-4">
             <input
@@ -147,11 +154,13 @@
               id="address"
               name="new_address"
               class="form-control"
+              value="contact.address"
             />
             <label class="form-label" for="address">Address</label>
           </div>
 
           <!-- Repeat Password input -->
+          {%for listPhones in contact.phones %}
           <div class="form-outline mb-4">
             <input
               type="phones"
@@ -160,18 +169,20 @@
               class="form-control"
               required
               pattern="^[0-9]{10}$"
+              value="{{listPhones.phone}}"
             />
             <label class="form-label" for="phones"
               >Phones</label
             >
           </div>
-
+          {% endfor %}
           <div class="form-outline mb-4">
             <input
               type="date"
               id="birth_date"
               name="new_birth_date"
               class="form-control"
+              value="{{contact.birth_date.strftime('%Y-%m-%d') if contact.birth_date else Date }}"
             />
             <label class="form-label" for="birth_date"
               >Birth Date</label

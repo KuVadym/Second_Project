@@ -3,9 +3,15 @@ import pathlib
 import dropbox
 from dropbox import Dropbox
 from dropbox.exceptions import AuthError
+import io
 
+from beanie import Document
 
-DROPBOX_ACCESS_TOKEN = 'sl.BPt_6ziX9XgbTAojTUM1nMGNUGIzWKooNLzyICpM_IwoDIgoMinhwKAlrtCSw71diM1i24Hk4B-hnV6Df9QJO1l510LjXwX3nv9d1WVsYlo7Pg1nBh3_SA8g6WM45a9HTxyaXzZEYt3i'
+class File(Document): # Now I don't know how it shoud work 
+    name = str
+    link = str
+
+DROPBOX_ACCESS_TOKEN = 'sl.BP2oL3aBjZvPwvsYie63zBb7vEWmA8KhGuallMU2aRwTT2ARGu8K76hc1Jk-2_xec3lJ6aXf6W2r7ZTxdgtuxgXHd7v0uVtykrAPKoVLjQrmYBG-zmVibJhLvc6uh5r2USXMpqrfqGI3'
 
 CATEGORIES = ['archives', 'audio', 'documents', 'images', 'video']
 
@@ -43,15 +49,14 @@ def order_files():
     return sort_files
 
 
-def dropbox_list_files(path):
+def dropbox_list_files():
     dbx = dropbox_connect()
     try:
-        print('get all files')
-        files = dbx.files_list_folder(path).entries
+        files = dbx.files_list_folder("").entries
         files_list = []
         for file in files:
             if isinstance(file, dropbox.files.FileMetadata):
-                files_list.append(file.path_display)
+                files_list.append(file)
         return files_list
     except Exception as e:
         print('Error getting list of files from Dropbox: ' + str(e))
@@ -71,6 +76,15 @@ def dropbox_upload_file(local_path, local_file, dropbox_file_path):
         print('Error uploading file to Dropbox: ' + str(e))
 
 
+def dropbox_upload_binary_file(binary_file, dropbox_file_path):
+    try:
+        dbx = dropbox_connect()
+        meta = dbx.files_upload(binary_file.read(), f"/{dropbox_file_path}", mode=dropbox.files.WriteMode("overwrite"))
+
+        return meta
+    except Exception as e:
+        print('Error uploading file to Dropbox: ' + str(e))
+
 def dropbox_get_link():
     links = {}
     dbx = dropbox_connect()
@@ -87,9 +101,10 @@ def dropbox_get_link():
     return links
 
 
-
+dropbox_list_files()
 
 # dropbox_upload_file(r'C:\Users\kuzik\Desktop', '2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg', f'/2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg')
+# dropbox_upload_binary_file()
 # sort_files = order_files()
 # print(sort_files)
 # 2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg

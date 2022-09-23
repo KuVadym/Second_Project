@@ -18,6 +18,7 @@ RUN pip install -r requirements.txt
 # copy every content from the local file to the image
 COPY . /
 
+
 # set environmetn variables
 ENV JWT_SECRET_KEY=qwerty
 ENV JWT_REFRESH_SECRET_KEY=ytrew
