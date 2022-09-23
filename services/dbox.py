@@ -11,7 +11,7 @@ class File(Document): # Now I don't know how it shoud work
     name = str
     link = str
 
-DROPBOX_ACCESS_TOKEN = 'sl.BP2oL3aBjZvPwvsYie63zBb7vEWmA8KhGuallMU2aRwTT2ARGu8K76hc1Jk-2_xec3lJ6aXf6W2r7ZTxdgtuxgXHd7v0uVtykrAPKoVLjQrmYBG-zmVibJhLvc6uh5r2USXMpqrfqGI3'
+DROPBOX_ACCESS_TOKEN = 'sl.BP2-LhTt4QnGwoqOfvubNS26t2rJ-t_bUcJhWU1pQpJCt8idsV1-NlJAXDwTjo4p4y2Xv_8iLIgUfaI-0nqyAd1TNJb2VHDq1o0GIHW0XglBOteMcQOFcnnYLOP60pzDxI6x9r7MGhdZ'
 
 CATEGORIES = ['archives', 'audio', 'documents', 'images', 'video']
 
