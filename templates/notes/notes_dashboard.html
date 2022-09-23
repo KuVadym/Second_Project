@@ -72,8 +72,8 @@ crossorigin="anonymous"
                     <div class="d-flex align-items-center">
                         <span class="mr-1"><i class="fa fa-star favourite-note"></i></span>
                         <span class="mr-1">
-                        <form action="/note" method="POST">
-                            <input type="hidden" name="contact-id" value="{{note.id}}">
+                        <form action="/notes" method="POST">
+                            <input type="hidden" name="note-id" id="note-id" value="{{note.id}}">
                          <button
                          
                          type="submit"
