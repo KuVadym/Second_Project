@@ -116,13 +116,13 @@
       <div class="modal-body">
         <form action="/contacts" method="POST">
           <!-- Hidden -->
-          <input type="hidden" name="contact-id" value="{{contact.id}}">
+          <input type="hidden" name="new_contact-id" value="{{contact.id}}">
           <!-- Name input -->
           <div class="form-outline mb-4">
             <input
               type="text"
               id="name"
-              name="name"
+              name="new_name"
               class="form-control"
               
             />
@@ -134,7 +134,7 @@
             <input
               type="email"
               id="emails"
-              name="emails"
+              name="new_emails"
               class="form-control"
             />
             <label class="form-label" for="emails">Email</label>
@@ -145,7 +145,7 @@
             <input
               type="text"
               id="address"
-              name="address"
+              name="new_address"
               class="form-control"
             />
             <label class="form-label" for="address">Address</label>
@@ -156,7 +156,7 @@
             <input
               type="phones"
               id="phones"
-              name="phones"
+              name="new_phones"
               class="form-control"
               required
               pattern="^[0-9]{10}$"
@@ -170,7 +170,7 @@
             <input
               type="date"
               id="birth_date"
-              name="birth_date"
+              name="new_birth_date"
               class="form-control"
             />
             <label class="form-label" for="birth_date"

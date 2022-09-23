@@ -48,9 +48,13 @@ class RecordService:
 
     @staticmethod
     async def update_record(current_user: User, record_id: UUID, data: RecordAuth):
+        if type(record_id)==str:
+            record_id = UUID(record_id)
+        print('record_id')
+        print(record_id)
+        print(type(record_id))
         record = await Records.find_one(Records.id == record_id, Records.owner.id == current_user.id)
         data.birth_date = datetime(int(data.birth_date.split('-')[0]), int(data.birth_date.split('-')[1]), int(data.birth_date.split('-')[2][0:2]))
-        print (record.birth_date)
         await record.update({"$set": data.dict(exclude_unset=True)})
         await record.save()
         return record
@@ -58,7 +62,9 @@ class RecordService:
 
     @staticmethod
     async def delete_record(current_user: User, record_id: UUID) -> None:
-        record = await RecordService.retrieve_record(current_user, record_id)
+        if type(record_id)==str:
+            record_id = UUID(record_id)
+        record = await Records.find_one(Records.id == record_id, Records.owner.id == current_user.id)
         if record:
             await record.delete()
         return None

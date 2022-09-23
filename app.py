@@ -113,12 +113,11 @@ async def contacts(request: Request):
 async def contacts(request: Request):
     if (await request.form()).get("name"):
         form = ContactCreateForm(request)
-    if (await request.form()).get("delete_code"):
+    if (await request.form()).get("new_contact-id"):
+        form = ContactUpdateForm(request)  
+    if (await request.form()).get("contact-id"):
         form = ContactDeleteForm(request)
-    if (await request.form()).get("new_name"):
-        form = ContactUpdateForm(request)    
     await form.load_data()
-    print(form.__dict__)
     token = request._cookies.get("access_token").split(" ")[1]
     user = await get_current_user(token)
     if not user:
@@ -131,9 +130,13 @@ async def contacts(request: Request):
             pass 
     list_records = await list(user)
     if type(form) == ContactUpdateForm:
-        update(record_id=form.id, current_user=user) # form.id()
+        print(type(form))
+        print(form.__dict__)
+        data = RecordAuth(name=form.name, birth_date=form.birth_date, address=form.address, emails=[Emails(email=form.email)], phones=[Phones(phone=form.phones)])
+        await update(record_id=form.id, data=data, current_user=user) # form.id()
     if type(form) == ContactDeleteForm:
         await delete(record_id=form.id, current_user=user)
+    list_records = await list(user)
     return templates.TemplateResponse("contacts/contacts.html", {"request": request, "user": user.__dict__, "list":list_records})
 
 
