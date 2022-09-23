@@ -14,6 +14,7 @@ from schemas.record_schema import RecordAuth
 from schemas.user_schema import UserAuth
 from services.record_service import RecordService
 from services.user_service import UserService
+from services.note_service import NoteService
 from api.auth.forms import ContactDeleteForm, ContactUpdateForm, LoginForm, UserCreateForm, ContactCreateForm
 from api.auth.jwt import login
 from api.deps.user_deps import get_current_user
@@ -29,10 +30,6 @@ valute = {}
 news = {}
 sport = {}
 weather = {}
-
-def square(a):
-    print(a)
-    return a ** 2
 
 def main_scrap():
     while True:
@@ -52,6 +49,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 recordService = RecordService()
 userService = UserService()
+noteService = NoteService()
 templates = Jinja2Templates(directory="templates")
 
 @api_router.post('/dashboard', response_class=HTMLResponse)
@@ -69,7 +67,13 @@ async def dashboard(request: Request):
 
 @app.get('/', response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "valute": valute, "news": news, "sport": sport, "weather": weather,})
+
+    token = request._cookies.get("access_token").split(" ")[1]
+    user = await get_current_user(token)
+    if not user:
+        return templates.TemplateResponse("index.html", {"request": request, "valute": valute, "news": news, "sport": sport, "weather": weather,})
+
+    return templates.TemplateResponse("index.html", {"request": request, "valute": valute, "news": news, "sport": sport, "weather": weather, "user": user.__dict__})
 
 @app.post('/',response_class=HTMLResponse)
 async def home(request: Request):
@@ -95,7 +99,7 @@ async def contacts(request: Request):
  
     list_records = await list(user)
 
-    return templates.TemplateResponse("contacts/contacts.html", {"request": request, "user": user.__dict__, "list":list_records, "square": square})
+    return templates.TemplateResponse("contacts/contacts.html", {"request": request, "user": user.__dict__, "list":list_records,})
 
 
 @app.get('/delete/{id}', response_class=HTMLResponse)
@@ -138,19 +142,68 @@ async def notes(request: Request):
     user = await get_current_user(token)
     if not user:
         return responses.RedirectResponse('/signup')
-    list_records = await list(user)
-    return templates.TemplateResponse("notes/notes.html", {"request": request, "user": user.__dict__, "list":list_records})
+    notes = await noteService.list_notes(user) 
+    # print(notes)
+    return templates.TemplateResponse("notes/notes.html", {"request": request, "user": user.__dict__,"notes":notes})
+
+@app.post('/notes', response_class=HTMLResponse)
+async def notes(request: Request, title: str = Form(...)):
+    token = request._cookies.get("access_token").split(" ")[1]
+    user = await get_current_user(token)
+    if not user:
+        return responses.RedirectResponse('/signup')
+
+    # newNotes = {
+    #             "name": title,
+    #             "records": [
+    #             {
+    #                 "description": title,
+    #             }
+    #             ],
+    #             "tags": [
+    #             {
+    #                 "name": "test"
+    #             }
+    #             ]
+    #             }
+    notes = await noteService.create_note(user, newNotes)
+    print(notes)
+    return templates.TemplateResponse("notes/notes.html", {"request": request, "user": user.__dict__,})  
+
+@app.get("/delete_note/{note_id}", response_class=RedirectResponse)
+async def add(request: Request,response, note_id: int,):
+
+    token = request._cookies.get("access_token").split(" ")[1]
+    user = await get_current_user(token)
+    if not user:
+        return responses.RedirectResponse('/signup')
+    print(note_id)
+    # deleteNote = await noteService.delete_note(user, f'{note_id}')
+
+    print(deleteNote)
+    
+    return response.RedirectResponse('/notes')  
+
 
 @app.get('/files', response_class=HTMLResponse)
 async def files(request: Request):
     
-    return templates.TemplateResponse("files/files.html", {"request": request})
+    token = request._cookies.get("access_token").split(" ")[1]
+    user = await get_current_user(token)
+    if not user:
+        return responses.RedirectResponse('/signup')
 
-# @app.get('/dashboard')
-# async def dashboard(request: Request, response: Response,):
-#     rec = await recordService.list_records()
-#     return templates.TemplateResponse("dashboard/dashboard.html", {"request": request})
+    return templates.TemplateResponse("files/files.html", {"request": request,  "user": user.__dict__,})
 
+@app.post('/files', response_class=HTMLResponse)
+async def files(request: Request):
+    
+    token = request._cookies.get("access_token").split(" ")[1]
+    user = await get_current_user(token)
+    if not user:
+        return responses.RedirectResponse('/signup')
+
+    return templates.TemplateResponse("files/files.html", {"request": request,  "user": user.__dict__,})
 
 @app.post('/signup')
 async def signup(request: Request):
