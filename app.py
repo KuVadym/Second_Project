@@ -150,7 +150,7 @@ async def notes(request: Request):
         return responses.RedirectResponse('/signup')
     notes = await noteService.list_notes(user) 
     # print(notes)
-    return templates.TemplateResponse("notes/notes.html", {"request": request, "user": user.__dict__,"notes":notes})
+    return templates.TemplateResponse("notes/notes_dashboard.html", {"request": request, "user": user.__dict__,"notes":notes})
 
 @app.post('/notes', response_class=HTMLResponse)
 async def notes(request: Request, title: str = Form(...)):
@@ -174,7 +174,9 @@ async def notes(request: Request, title: str = Form(...)):
     if type(form) == NoteDeleteForm:
         await note.delete(note_id=form.id, current_user=user)
 
-    return templates.TemplateResponse("notes/notes.html", {"request": request, "user": user.__dict__,})  
+    notes = await noteService.create_note(user, newNotes)
+    print(notes)
+    return templates.TemplateResponse("notes/notes_dashboard.html", {"request": request, "user": user.__dict__,})  
 
 # @app.get("/delete_note/{note_id}", response_class=RedirectResponse)
 # async def add(request: Request,response, note_id: int,):
@@ -198,21 +200,14 @@ async def files(request: Request):
     user = await get_current_user(token)
     if not user:
         return responses.RedirectResponse('/signup')
+
     return templates.TemplateResponse("files/files.html", {"request": request,  "user": user.__dict__,})
-# @app.get('/dashboard')
-# async def dashboard(request: Request, response: Response,):
-#     rec = await recordService.list_records()
-#     return templates.TemplateResponse("dashboard/dashboard.html", {"request": request})
 
 @app.post('/files', response_class=HTMLResponse)
 async def files(request: Request):
+    
     token = request._cookies.get("access_token").split(" ")[1]
     user = await get_current_user(token)
-    form = FileUploadForm(request=request)
-    await form.load_data()
-    print(form.__dict__)
-    print(type(form.file))
-    print(form.file)
     if not user:
         return responses.RedirectResponse('/signup')
 
