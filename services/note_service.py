@@ -9,7 +9,6 @@ class NoteService:
     @staticmethod
     async def list_notes(user: User) -> List[Note]:
         notes = await Note.find(Note.owner.id == user.id).to_list()
-        print(notes)
         return notes
 
 

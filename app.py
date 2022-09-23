@@ -151,18 +151,19 @@ async def notes(request: Request):
     if not user:
         return responses.RedirectResponse('/signup')
     notes = await noteService.list_notes(user) 
-    # print(notes)
     return templates.TemplateResponse("notes/notes_dashboard.html", {"request": request, "user": user.__dict__,"notes":notes})
 
 @app.post('/notes', response_class=HTMLResponse)
 async def notes(request: Request):
-    print((await request.form()).get("note-has-title"))
+    x = await request.form()
+    print(x)
     if (await request.form()).get("note-has-title"):
         form = NoteCreateForm(request)
     if (await request.form()).get("new_note-id"):
         form = NoteUpdateForm(request)  
     if (await request.form()).get("note-id"):
         form = NoteDeleteForm(request)
+    print(form)
     await form.load_data()
     token = request._cookies.get("access_token").split(" ")[1]
     user = await get_current_user(token)
@@ -175,6 +176,7 @@ async def notes(request: Request):
         data = NoteAuth(name=form.title, records=[Record(description=form.description)])
         new_note = await note.update(note_id=form.id, data=data, current_user=user)
     if type(form) == NoteDeleteForm:
+        print("delete form\n")
         print(form.__dict__)
         await note.delete(note_id=form.id, current_user=user)
     notes = await noteService.list_notes(user) 
