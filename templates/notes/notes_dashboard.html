@@ -117,6 +117,7 @@ crossorigin="anonymous"
     </div>
 
     <!-- Modal Add notes -->
+    <form  action="/notes" method="POST">
     <div class="modal fade" id="addnotesmodal" tabindex="-1" role="dialog" aria-labelledby="addnotesmodalTitle" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content border-0">
@@ -134,14 +135,14 @@ crossorigin="anonymous"
                                     <div class="col-md-12 mb-3">
                                         <div class="note-title">
                                             <label>Note Title</label>
-                                            <input type="text" id="note-has-title" class="form-control" minlength="25" placeholder="Title" />
+                                            <input type="text" id="note-has-title" name="note-has-title" class="form-control" minlength="10" placeholder="Title" />
                                         </div>
                                     </div>
 
                                     <div class="col-md-12">
                                         <div class="note-description">
                                             <label>Note Description</label>
-                                            <textarea id="note-has-description" class="form-control" minlength="60" placeholder="Description" rows="3"></textarea>
+                                            <textarea id="note-has-description" name="note-has-description" class="form-control" minlength="20" placeholder="Description" rows="3"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -150,13 +151,13 @@ crossorigin="anonymous"
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="btn-n-save" class="float-left btn btn-success" style="display: none;">Save</button>
-                    <button class="btn btn-danger" data-dismiss="modal">Discard</button>
-                    <button id="btn-n-add" class="btn btn-info" disabled="disabled">Add</button>
+                    <button  type="submit" class="btn btn-info">Add</button>
                 </div>
+
             </div>
         </div>
     </div>
+    </form>
 </div>
 
 
@@ -412,7 +413,7 @@ $(function() {
 
     // Button add
     $("#btn-n-add").on('click', function(event) {
-        event.preventDefault();
+
         /* Act on the event */
         var today = new Date();
       var dd = String(today.getDate()).padStart(2, '0');
@@ -460,6 +461,7 @@ $(function() {
         removeNote();
         favouriteNote();
         addLabelGroups();
+
     });
 
     $('#addnotesmodal').on('hidden.bs.modal', function (event) {

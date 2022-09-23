@@ -113,6 +113,8 @@ async def contacts(request: Request):
 
 @app.post('/contacts', response_class=HTMLResponse)
 async def contacts(request: Request):
+    x = await (request.form())
+    print(x)
     if (await request.form()).get("name"):
         form = ContactCreateForm(request)
     if (await request.form()).get("new_contact-id"):
@@ -153,12 +155,13 @@ async def notes(request: Request):
     return templates.TemplateResponse("notes/notes_dashboard.html", {"request": request, "user": user.__dict__,"notes":notes})
 
 @app.post('/notes', response_class=HTMLResponse)
-async def notes(request: Request, title: str = Form(...)):
-    if (await request.form()).get("name"):
+async def notes(request: Request):
+    print((await request.form()).get("note-has-title"))
+    if (await request.form()).get("note-has-title"):
         form = NoteCreateForm(request)
-    if (await request.form()).get("new_contact-id"):
+    if (await request.form()).get("new_note-id"):
         form = NoteUpdateForm(request)  
-    if (await request.form()).get("contact-id"):
+    if (await request.form()).get("note-id"):
         form = NoteDeleteForm(request)
     await form.load_data()
     token = request._cookies.get("access_token").split(" ")[1]
@@ -166,14 +169,15 @@ async def notes(request: Request, title: str = Form(...)):
     if not user:
         return responses.RedirectResponse('/signup')
     if type(form) == NoteCreateForm:
-        data = NoteAuth(name=form.title, records=[Record(description=form.description)])
+        data = NoteAuth(name=form.title, records=[Record(description=form.description)], tags=[Tag(name="")])
         new_note = await note.create_note(data=data, current_user=user)
     if type(form) == NoteUpdateForm:
         data = NoteAuth(name=form.title, records=[Record(description=form.description)])
         new_note = await note.update(note_id=form.id, data=data, current_user=user)
     if type(form) == NoteDeleteForm:
+        print(form.__dict__)
         await note.delete(note_id=form.id, current_user=user)
-
+    notes = await noteService.list_notes(user) 
     return templates.TemplateResponse("notes/notes_dashboard.html", {"request": request, "user": user.__dict__,})  
 
 # @app.get("/delete_note/{note_id}", response_class=RedirectResponse)
