@@ -59,6 +59,12 @@ class RecordService:
     @staticmethod
     async def delete_record(current_user: User, record_id: UUID) -> None:
         print('start del func')
+        print('record_id')
+        record_id =UUID(record_id)
+        print(type(record_id))
+        print(record_id)
+        print('current_user.id')
+        print(type(current_user.id))
         record = await Records.find_one(Records.id == record_id, Records.owner.id == current_user.id)
         print("record")
         print(record)
