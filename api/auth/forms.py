@@ -88,12 +88,11 @@ class ContactDeleteForm:
     def __init__(self, request: Request):
         self.request: Request = request
         self.id: Optional[str] = None
-        self.code: Optional[str] = None
+
 
     async def load_data(self):
         form = await self.request.form()
-        self.id = form.get("id")
-        self.code = form.get("code")
+        self.id = form.get("contact-id")
 
 
 class ContactUpdateForm:

@@ -108,7 +108,7 @@ async def contacts(request: Request):
 async def contacts(request: Request):
     if (await request.form()).get("name"):
         form = ContactCreateForm(request)
-    if (await request.form()).get("delete_code"):
+    if (await request.form()).get("contact-id"):
         form = ContactDeleteForm(request)
     if (await request.form()).get("new_name"):
         form = ContactUpdateForm(request)    
@@ -116,6 +116,7 @@ async def contacts(request: Request):
     print(form.__dict__)
     token = request._cookies.get("access_token").split(" ")[1]
     user = await get_current_user(token)
+    print(type(user))
     if not user:
         return responses.RedirectResponse('/signup')
     if type(form) == ContactCreateForm:
