@@ -148,7 +148,7 @@ async def notes(request: Request):
         return responses.RedirectResponse('/signup')
     notes = await noteService.list_notes(user) 
     # print(notes)
-    return templates.TemplateResponse("notes/notes.html", {"request": request, "user": user.__dict__,"notes":notes})
+    return templates.TemplateResponse("notes/notes_dashboard.html", {"request": request, "user": user.__dict__,"notes":notes})
 
 @app.post('/notes', response_class=HTMLResponse)
 async def notes(request: Request, title: str = Form(...)):
@@ -157,22 +157,9 @@ async def notes(request: Request, title: str = Form(...)):
     if not user:
         return responses.RedirectResponse('/signup')
 
-    # newNotes = {
-    #             "name": title,
-    #             "records": [
-    #             {
-    #                 "description": title,
-    #             }
-    #             ],
-    #             "tags": [
-    #             {
-    #                 "name": "test"
-    #             }
-    #             ]
-    #             }
     notes = await noteService.create_note(user, newNotes)
     print(notes)
-    return templates.TemplateResponse("notes/notes.html", {"request": request, "user": user.__dict__,})  
+    return templates.TemplateResponse("notes/notes_dashboard.html", {"request": request, "user": user.__dict__,})  
 
 @app.get("/delete_note/{note_id}", response_class=RedirectResponse)
 async def add(request: Request,response, note_id: int,):

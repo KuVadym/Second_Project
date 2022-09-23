@@ -89,7 +89,7 @@
                 </td>
                 <td>
                   <p class="text-muted mb-0">
-                    {{contact.birth_date.strftime('%Y-%m-%d')}}
+                    {{contact.birth_date.strftime('%Y-%m-%d') if contact.birth_date else Date }}
                   </p>
                 </td>
                 <td>
