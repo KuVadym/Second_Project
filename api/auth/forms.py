@@ -174,4 +174,4 @@ class FileUploadForm:
 
     async def load_data(self):
         form = await self.request.form()
-        self.file = form.get("upload")
+        self.file = form.get("file")

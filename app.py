@@ -27,6 +27,7 @@ from scrap.scrap import scraping
 from models.models_mongo import User
 from api.api_v1.hendlers.record import delete, list, create_record, update
 from api.api_v1.hendlers import note
+from services.dbox import dropbox_list_files, dropbox_upload_binary_file
 
 valute = {}
 news = {}
@@ -202,19 +203,26 @@ async def files(request: Request):
     
     token = request._cookies.get("access_token").split(" ")[1]
     user = await get_current_user(token)
+
     if not user:
         return responses.RedirectResponse('/signup')
+    file_list = dropbox_list_files()
+    print(file_list)
+    return templates.TemplateResponse("files/files.html", {"request": request,  "user": user.__dict__, "files":file_list})
 
-    return templates.TemplateResponse("files/files.html", {"request": request,  "user": user.__dict__,})
-
-@app.post('/files', response_class=HTMLResponse)
+@app.post('/uploadfiles', response_class=HTMLResponse)
 async def files(request: Request):
-    
+    form = FileUploadForm(request)
+    print(type(form))
+    await form.load_data()
+    print(form.file.file.__dict__)
     token = request._cookies.get("access_token").split(" ")[1]
     user = await get_current_user(token)
     if not user:
         return responses.RedirectResponse('/signup')
-
+    dropbox_upload_binary_file(binary_file=form.file.file._file, dropbox_file_path=form.file.filename)
+    # form.file.filename._file
+    # form.file.filename
     return templates.TemplateResponse("files/files.html", {"request": request,  "user": user.__dict__,})
 
 @app.post('/signup')
