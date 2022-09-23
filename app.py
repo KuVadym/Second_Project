@@ -10,12 +10,13 @@ from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 from models.models_mongo import Emails, Record, Note, Tag, Phones, Records, User
 from api.api_v1.router import router
+from schemas.note_schema import NoteAuth
 from schemas.record_schema import RecordAuth
 from schemas.user_schema import UserAuth
 from services.record_service import RecordService
 from services.user_service import UserService
 from services.note_service import NoteService
-from api.auth.forms import ContactDeleteForm, ContactUpdateForm, LoginForm, UserCreateForm, ContactCreateForm
+from api.auth.forms import ContactDeleteForm, ContactUpdateForm, FileUploadForm, LoginForm, UserCreateForm, ContactCreateForm, NoteCreateForm, NoteDeleteForm, NoteUpdateForm
 from api.auth.jwt import login
 from api.deps.user_deps import get_current_user
 from api.api_v1.hendlers.user import create_user
@@ -25,6 +26,7 @@ from threading import Thread
 from scrap.scrap import scraping
 from models.models_mongo import User
 from api.api_v1.hendlers.record import delete, list, create_record, update
+from api.api_v1.hendlers import note
 
 valute = {}
 news = {}
@@ -103,10 +105,10 @@ async def contacts(request: Request):
     return templates.TemplateResponse("contacts/contacts.html", {"request": request, "user": user.__dict__, "list":list_records,})
 
 
-@app.get('/delete/{id}', response_class=HTMLResponse)
-async def contacts(request: Request):
-    print(id)
-    return
+# @app.get('/delete/{id}', response_class=HTMLResponse)
+# async def contacts(request: Request):
+#     print(id)
+#     return
 
 
 @app.post('/contacts', response_class=HTMLResponse)
@@ -152,41 +154,41 @@ async def notes(request: Request):
 
 @app.post('/notes', response_class=HTMLResponse)
 async def notes(request: Request, title: str = Form(...)):
+    if (await request.form()).get("name"):
+        form = NoteCreateForm(request)
+    if (await request.form()).get("new_contact-id"):
+        form = NoteUpdateForm(request)  
+    if (await request.form()).get("contact-id"):
+        form = NoteDeleteForm(request)
+    await form.load_data()
     token = request._cookies.get("access_token").split(" ")[1]
     user = await get_current_user(token)
     if not user:
         return responses.RedirectResponse('/signup')
+    if type(form) == NoteCreateForm:
+        data = NoteAuth(name=form.title, records=[Record(description=form.description)])
+        new_note = await note.create_note(data=data, current_user=user)
+    if type(form) == NoteUpdateForm:
+        data = NoteAuth(name=form.title, records=[Record(description=form.description)])
+        new_note = await note.update(note_id=form.id, data=data, current_user=user)
+    if type(form) == NoteDeleteForm:
+        await note.delete(note_id=form.id, current_user=user)
 
-    # newNotes = {
-    #             "name": title,
-    #             "records": [
-    #             {
-    #                 "description": title,
-    #             }
-    #             ],
-    #             "tags": [
-    #             {
-    #                 "name": "test"
-    #             }
-    #             ]
-    #             }
-    notes = await noteService.create_note(user, newNotes)
-    print(notes)
     return templates.TemplateResponse("notes/notes.html", {"request": request, "user": user.__dict__,})  
 
-@app.get("/delete_note/{note_id}", response_class=RedirectResponse)
-async def add(request: Request,response, note_id: int,):
+# @app.get("/delete_note/{note_id}", response_class=RedirectResponse)
+# async def add(request: Request,response, note_id: int,):
 
-    token = request._cookies.get("access_token").split(" ")[1]
-    user = await get_current_user(token)
-    if not user:
-        return responses.RedirectResponse('/signup')
-    print(note_id)
-    # deleteNote = await noteService.delete_note(user, f'{note_id}')
+#     token = request._cookies.get("access_token").split(" ")[1]
+#     user = await get_current_user(token)
+#     if not user:
+#         return responses.RedirectResponse('/signup')
+#     print(note_id)
+#     # deleteNote = await noteService.delete_note(user, f'{note_id}')
 
-    print(deleteNote)
+#     print(deleteNote)
     
-    return response.RedirectResponse('/notes')  
+#     return response.RedirectResponse('/notes')  
 
 
 @app.get('/files', response_class=HTMLResponse)
@@ -196,14 +198,21 @@ async def files(request: Request):
     user = await get_current_user(token)
     if not user:
         return responses.RedirectResponse('/signup')
-
     return templates.TemplateResponse("files/files.html", {"request": request,  "user": user.__dict__,})
+# @app.get('/dashboard')
+# async def dashboard(request: Request, response: Response,):
+#     rec = await recordService.list_records()
+#     return templates.TemplateResponse("dashboard/dashboard.html", {"request": request})
 
 @app.post('/files', response_class=HTMLResponse)
 async def files(request: Request):
-    
     token = request._cookies.get("access_token").split(" ")[1]
     user = await get_current_user(token)
+    form = FileUploadForm(request=request)
+    await form.load_data()
+    print(form.__dict__)
+    print(type(form.file))
+    print(form.file)
     if not user:
         return responses.RedirectResponse('/signup')
 

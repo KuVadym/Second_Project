@@ -114,4 +114,64 @@ class ContactUpdateForm:
         self.birth_date = form.get("new_birth_date")
         self.address = form.get("new_address")
         self.email = form.get("new_emails")
-        self.phones = form.get("new_phones")  
+        self.phones = form.get("new_phones") 
+
+
+class NoteCreateForm:
+    def __init__(self, request: Request):
+        self.request: Request = request
+        self.errors: List = []
+        self.title: Optional[str] = None
+        self.description: Optional[str] = None
+
+
+    async def load_data(self):
+        form = await self.request.form()
+        self.title = form.get("note-has-title")
+        self.description = form.get("note-has-description")
+ 
+
+    async def is_valid(self):
+        if check_phone(self.phones) == False:
+            self.errors.append("Phone is not correct!\nCorrect form is: 0801234567 ")
+        if not self.errors:
+            return True
+        return False      
+
+
+class NoteDeleteForm:
+    def __init__(self, request: Request):
+        self.request: Request = request
+        self.id: Optional[str] = None
+
+
+    async def load_data(self):
+        form = await self.request.form()
+        self.id = form.get("note-id")
+
+
+class NoteUpdateForm:
+    def __init__(self, request: Request):
+        self.id: Optional[str] = None
+        self.request: Request = request
+        self.errors: List = []
+        self.title: Optional[str] = None
+        self.description: Optional[str] = None
+
+
+    async def load_data(self):
+        form = await self.request.form()
+        self.id = form.get("new_note-id")
+        self.title = form.get("new_note-has-title")
+        self.description = form.get("new_note-has-description")
+
+
+class FileUploadForm:
+    def __init__(self, request: Request):
+        self.request: Request = request
+        self.errors: List = []
+        self.file = None
+
+    async def load_data(self):
+        form = await self.request.form()
+        self.file = form.get("upload")

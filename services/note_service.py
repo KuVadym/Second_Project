@@ -43,6 +43,8 @@ class NoteService:
     
     @staticmethod
     async def update_note(current_user: User, note_id: UUID, data: NoteAuth):
+        if type(note_id) == str:
+            note_id = UUID(note_id)
         note = await NoteService.retrieve_note(current_user, note_id)
         await note.update({"$set": data.dict(exclude_unset=True)})
         
@@ -51,6 +53,8 @@ class NoteService:
     
     @staticmethod
     async def delete_note(current_user: User, note_id: UUID) -> None:
+        if type(note_id) == str:
+            note_id = UUID(note_id)
         note = await NoteService.retrieve_note(current_user, note_id)
         if note:
             await note.delete()
