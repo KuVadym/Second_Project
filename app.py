@@ -174,8 +174,6 @@ async def notes(request: Request, title: str = Form(...)):
     if type(form) == NoteDeleteForm:
         await note.delete(note_id=form.id, current_user=user)
 
-    notes = await noteService.create_note(user, newNotes)
-    print(notes)
     return templates.TemplateResponse("notes/notes_dashboard.html", {"request": request, "user": user.__dict__,})  
 
 # @app.get("/delete_note/{note_id}", response_class=RedirectResponse)
