@@ -67,13 +67,14 @@ async def dashboard(request: Request):
 
 @app.get('/', response_class=HTMLResponse)
 async def home(request: Request):
+    
+    if (request._cookies.get("access_token")) :
+        token = request._cookies.get("access_token").split(" ")[1]
+        user = await get_current_user(token)
+        return  templates.TemplateResponse("index.html", {"request": request, "valute": valute, "news": news, "sport": sport, "weather": weather, "user":user.__dict__})
+  
 
-    token = request._cookies.get("access_token").split(" ")[1]
-    user = await get_current_user(token)
-    if not user:
-        return templates.TemplateResponse("index.html", {"request": request, "valute": valute, "news": news, "sport": sport, "weather": weather,})
-
-    return templates.TemplateResponse("index.html", {"request": request, "valute": valute, "news": news, "sport": sport, "weather": weather, "user": user.__dict__})
+    return templates.TemplateResponse("index.html", {"request": request, "valute": valute, "news": news, "sport": sport, "weather": weather,})
 
 @app.post('/',response_class=HTMLResponse)
 async def home(request: Request):
