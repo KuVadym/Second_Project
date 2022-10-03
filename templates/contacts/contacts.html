@@ -154,7 +154,6 @@
               id="address"
               name="new_address"
               class="form-control"
-              value="contact.address"
             />
             <label class="form-label" for="address">Address</label>
           </div>
@@ -194,7 +193,7 @@
           Close
         </button>
         <button type="submit" class="btn btn-primary btn-block">
-            Add user
+            Edit contact
           </button>
         </form>
       </div>
@@ -237,19 +236,6 @@
         {% endif %}
       </div>
     </section>
-    <!-- <script type="text/javascript">
-      const btn = document.querySelectorAll(".btn-d");
-
-      btn.forEach((btnItem, idx) => {
-        btnItem.addEventListener("click", (e) => {
-          const uuid = e.currentTarget.dataset.delete;
-          return fetch(`http://localhost:8000/contacts`, {
-            method: "POST",
-            body: JSON.stringify({ uuid: uuid }),
-          });
-        });
-      });
-    </script> -->
     <script
       src="{{ url_for('static', path='/js/modal.js') }}"
       type="module"
