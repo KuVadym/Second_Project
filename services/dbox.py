@@ -11,7 +11,7 @@ class File(Document): # Now I don't know how it shoud work
     name = str
     link = str
 
-DROPBOX_ACCESS_TOKEN = 'sl.BQWHOIKbAlwCQ7eQB8TzNFegHfyIvbuXxZTTxkJuQ3ZNcqpDjWkzqEBhUHyeSHczcXgTHf9c5ZNrtzMZxXQlvBXV88oJzyE-tf090x39APqSWSWJpIg2QcjxVr879pFo3tpq4_Qt9Rz6'
+DROPBOX_ACCESS_TOKEN = 'sl.BQmZgsNLce6u4zAAefQ_Sm-MqFybqrXXIbWzqNbxp32swsX8DWlyOd1Auxyc-_V6RYEoZOax4iZ84ohu1SFGVGESQi3ExeebkIGAzqVF7NJK-gU0yJ7MTmhyFzWXVpeIDVOYm1qz8WXA'
 
 CATEGORIES = ['archives', 'audio', 'documents', 'images', 'video']
 
@@ -86,25 +86,17 @@ def dropbox_upload_binary_file(binary_file, dropbox_file_path):
         print('Error uploading file to Dropbox: ' + str(e))
 
 def dropbox_get_link():
-    links = {}
+    links = []
     dbx = dropbox_connect()
-    files = dropbox_list_files('')
+    files = dropbox_list_files()
     for file in files:
         try:
-            shared_link_metadata = dbx.sharing_create_shared_link_with_settings(file)
-            links[file[1:]]=(shared_link_metadata.url).replace('?dl=0', '?dl=1')
+            shared_link_metadata = dbx.sharing_create_shared_link_with_settings(file.path_display)
+            links[file.path_display[1:]]=(shared_link_metadata.url).replace('?dl=0', '?dl=1')
+            print(shared_link_metadata.url)
         except dropbox.exceptions.ApiError as exception:
             if exception.error.is_shared_link_already_exists():
-                shared_link_metadata = dbx.sharing_get_shared_links()
+                shared_link_metadata = dbx.sharing_get_shared_links(file.path_display)
                 shared_link = (shared_link_metadata.links[0].url).replace('?dl=0', '?dl=1')
-                links[file[1:]]=shared_link
+                links.append(dict(name=file.path_display[1:], link=shared_link))
     return links
-
-
-dropbox_list_files()
-
-# dropbox_upload_file(r'C:\Users\kuzik\Desktop', '2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg', f'/2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg')
-# dropbox_upload_binary_file()
-# sort_files = order_files()
-# print(sort_files)
-# 2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg

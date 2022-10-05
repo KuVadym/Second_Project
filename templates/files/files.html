@@ -61,12 +61,12 @@
         }
       })
     </script> -->
-    {% if files %}
-    {% for file in files%}
+    {% if links %}
+    {% for item in links%}
       <ul>
         <li>
-          <a target="_blank" href="https://www.dropbox.com/s/ch49c6qx81oyrs6/{{file.path_display}}" role="button" class="outline"
-            >{{file.name}}</a>
+          <a target="_blank" href="{{item.link}}" role="button" class="outline"
+            >{{item.name}}</a>
         </li>
       </ul>
       {% endfor %}

@@ -64,7 +64,7 @@
             </thead>
             <tbody>
               {% for contact in list %}
-              <tr>
+              <tr class="{{contact.id}}">
                 <td>
                   <div class="d-flex align-items-center">
                     <div class="ms-3">
@@ -98,119 +98,121 @@
                   </p>
                 </td>
                 <td>
-                  <div
-  class="modal fade"
-  id="edit"
-  data-bs-backdrop="static"
-  data-bs-keyboard="false"
-  tabindex="-1"
-  aria-labelledby="edit"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="edit">POCKET MEMORY</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <form action="/contacts" method="POST">
-          <!-- Hidden -->
-          <input type="hidden" name="new_contact-id" value="{{contact.id}}">
-          <!-- Name input -->
-          <div class="form-outline mb-4">
-            <input
-              type="text"
-              id="name"
-              name="new_name"
-              class="form-control"
-              value="{{contact.name}}"
-            />
-            <label class="form-label" for="name">Name</label>
-          </div>
-
-          <!-- Email input -->
-          {%for listEmail in contact.emails %}
-          <div class="form-outline mb-4">
-            <input
-              type="email"
-              id="emails"
-              name="new_emails"
-              class="form-control"
-              value="{{listEmail.email}}"
-            />
-            <label class="form-label" for="emails">Email</label>
-          </div>
-          {% endfor %}
-          <!-- Password input -->
-          <div class="form-outline mb-4">
-            <input
-              type="text"
-              id="address"
-              name="new_address"
-              class="form-control"
-            />
-            <label class="form-label" for="address">Address</label>
-          </div>
-
-          <!-- Repeat Password input -->
-          {%for listPhones in contact.phones %}
-          <div class="form-outline mb-4">
-            <input
-              type="phones"
-              id="phones"
-              name="new_phones"
-              class="form-control"
-              required
-              pattern="^[0-9]{10}$"
-              value="{{listPhones.phone}}"
-            />
-            <label class="form-label" for="phones"
-              >Phones</label
-            >
-          </div>
-          {% endfor %}
-          <div class="form-outline mb-4">
-            <input
-              type="date"
-              id="birth_date"
-              name="new_birth_date"
-              class="form-control"
-              value="{{contact.birth_date.strftime('%Y-%m-%d') if contact.birth_date else Date }}"
-            />
-            <label class="form-label" for="birth_date"
-              >Birth Date</label
-            >
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
-        </button>
-        <button type="submit" class="btn btn-primary btn-block">
-            Edit contact
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
                   <button
                     type="button"
                     class="btn btnIcon btn-rounded"
                     data-bs-toggle="modal"
-                    data-bs-target="#edit"
+                    data-bs-target="#{{contact.id}}"
+                    value="{{contact}}"
                   >
                     <i
                       class="fa fa-pencil-square-o fa-2x"
                       aria-hidden="true"
                     ></i>
                   </button>
+                  <div
+                  class="modal fade"
+                  id="{{contact.id}}"
+                  data-bs-backdrop="static"
+                  data-bs-keyboard="false"
+                  tabindex="-1"
+                  aria-labelledby="edit"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="edit">POCKET MEMORY</h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <form action="/contacts" method="POST">
+                          <!-- Hidden -->
+                          <input type="hidden" name="new_contact-id" value="{{contact.id}}">
+                          <!-- Name input -->
+                          <div class="form-outline mb-4">
+                            <input
+                              type="text"
+                              id="name"
+                              name="new_name"
+                              class="form-control"
+                              value="{{contact.name}}"
+                            />
+                            <label class="form-label" for="name">Name</label>
+                          </div>
+                
+                          <!-- Email input -->
+                          {%for listEmail in contact.emails %}
+                          <div class="form-outline mb-4">
+                            <input
+                              type="email"
+                              id="emails"
+                              name="new_emails"
+                              class="form-control"
+                              value="{{listEmail.email}}"
+                            />
+                            <label class="form-label" for="emails">Email</label>
+                          </div>
+                          {% endfor %}
+                          <!-- address input -->
+                          <div class="form-outline mb-4">
+                            <input
+                              type="text"
+                              id="address"
+                              name="new_address"
+                              class="form-control"
+                              value="{{contact.address}}"
+                            />
+                            <label class="form-label" for="address">Address</label>
+                          </div>
+                
+                          <!-- Phone input -->
+                          {%for listPhones in contact.phones %}
+                          <div class="form-outline mb-4">
+                            <input
+                              type="phones"
+                              id="phones"
+                              name="new_phones"
+                              class="form-control"
+                              required
+                              pattern="^[0-9]{10}$"
+                              value="{{listPhones.phone}}"
+                            />
+                            <label class="form-label" for="phones"
+                              >Phones</label
+                            >
+                          </div>
+                          {% endfor %}
+                          <div class="form-outline mb-4">
+                            <input
+                              type="date"
+                              id="birth_date"
+                              name="new_birth_date"
+                              class="form-control"
+                              value="{{contact.birth_date.strftime('%Y-%m-%d') if contact.birth_date else Date }}"
+                            />
+                            <label class="form-label" for="birth_date"
+                              >Birth Date</label
+                            >
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                          Close
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Edit contact
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                   <form action="/contacts" method="POST">
                      <input type="hidden" name="contact-id" value="{{contact.id}}">
                   <button
@@ -247,3 +249,16 @@
     ></script>
   </body>
 </html>
+
+<script>
+const carts = document.querySelectorAll('.cart'); 
+ 
+for (let i = 0; i < carts.length; i++){ 
+    carts[i].addEventListener('click', mainAction); 
+} 
+ 
+function mainAction(){ 
+    if(!check(this)) return; 
+    showContent(this); 
+}
+</script>

@@ -152,8 +152,6 @@ async def contacts(request: Request):
             pass
     list_records = await list(user)
     if type(form) == ContactUpdateForm:
-        print(type(form))
-        print(form.__dict__)
         data = RecordAuth(name=form.name, 
                           birth_date=form.birth_date,
                           address=form.address,
@@ -183,14 +181,12 @@ async def notes(request: Request):
 @app.post('/notes', response_class=HTMLResponse)
 async def notes(request: Request):
     x = await request.form()
-    print(x)
     if (await request.form()).get("note-has-title"):
         form = NoteCreateForm(request)
     if (await request.form()).get("new_note-id"):
         form = NoteUpdateForm(request)
     if (await request.form()).get("note-id"):
         form = NoteDeleteForm(request)
-    print(form)
     await form.load_data()
     user = await get_user(request)
     if not user:
@@ -221,12 +217,12 @@ async def files(request: Request):
     user = await get_user(request)
     if not user:
         return responses.RedirectResponse('/signup')
-    file_list = dropbox_list_files()
-    print(file_list)
+    links = dropbox_get_link()
+    print(links)
     return templates.TemplateResponse("files/files.html",
                                      {"request": request,
                                       "user": user.__dict__,
-                                      "files":file_list})
+                                      "links":links})
 
 
 @app.post('/uploadfiles', response_class=HTMLResponse)
@@ -238,9 +234,12 @@ async def files(request: Request):
         return responses.RedirectResponse('/signup')
     dropbox_upload_binary_file(binary_file=form.file.file._file,
                                dropbox_file_path=form.file.filename)
+    file_list = dropbox_list_files()
+    links = dropbox_get_link()
     return templates.TemplateResponse("files/files.html",
                                      {"request": request,
-                                      "user": user.__dict__,})
+                                      "user": user.__dict__,
+                                      "links":links})
 
 
 @app.post('/signup')
