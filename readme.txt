@@ -18,9 +18,11 @@ v. 0.0.2
 7. Add Logout function, and update templates.
 
 v. 0.0.2a
-Bugs:
 1. Incorrect edit contact form. (You can edit just first contact on page!) done
 2. Now in files correct app get file links from dropbox.com
 
-3. in files all files is common. 
-4. Dont work Notes tags
+v. 0.0.2b
+1. Add solution for separete common files and user files. 
+
+bugs to solve:
+1. Dont work Notes tags

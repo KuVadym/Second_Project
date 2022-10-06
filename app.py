@@ -211,35 +211,63 @@ async def notes(request: Request):
                                       "notes":notes,
                                       })
 
-
+@app.post('/files', response_class=HTMLResponse)
 @app.get('/files', response_class=HTMLResponse)
 async def files(request: Request):
+    user_links = ''
     user = await get_user(request)
     if not user:
         return responses.RedirectResponse('/signup')
     links = dropbox_get_link()
-    print(links)
+    try:
+        user_links = dropbox_get_link(dropbox_token=request._cookies.get("user_dropbox_access_token"))
+    except:
+        print("no valid token")
     return templates.TemplateResponse("files/files.html",
                                      {"request": request,
                                       "user": user.__dict__,
-                                      "links":links})
+                                      "links":links,
+                                      "user_links":user_links,})
 
 
 @app.post('/uploadfiles', response_class=HTMLResponse)
 async def files(request: Request):
-    form = FileUploadForm(request)
-    await form.load_data()
+    user_links = '' 
     user = await get_user(request)
     if not user:
         return responses.RedirectResponse('/signup')
-    dropbox_upload_binary_file(binary_file=form.file.file._file,
-                               dropbox_file_path=form.file.filename)
-    file_list = dropbox_list_files()
+    if (await request.form()).get("file"):
+        form = FileUploadForm(request)
+        await form.load_data()
+        dropbox_upload_binary_file(binary_file=form.file.file._file,
+                                   dropbox_file_path=form.file.filename)
+    if (await request.form()).get("user_file"):
+        form = FileUserUploadForm(request)
+        await form.load_data()
+        dropbox_upload_binary_file(binary_file=form.file.file._file,
+                                   dropbox_file_path=form.file.filename,
+                                   dropbox_token=request._cookies.get("user_dropbox_access_token"))
+    if (await request.form()).get("token"):
+        form = FileAccessTokenForm(request)
+        await form.load_data()
+        user_dropbox_access_token = form.token
+        redirectresponse = responses.RedirectResponse('/files')
+        redirectresponse.set_cookie(key="user_dropbox_access_token", value=user_dropbox_access_token) 
+        try:
+            user_links = dropbox_get_link(user_dropbox_access_token)
+            return redirectresponse
+        except:
+            error_massege = 'Enter your access token in form'
     links = dropbox_get_link()
+    try:
+        user_links = dropbox_get_link(dropbox_token=request._cookies.get("user_dropbox_access_token"))
+    except:
+        print('Enter your access token in form')
     return templates.TemplateResponse("files/files.html",
                                      {"request": request,
                                       "user": user.__dict__,
-                                      "links":links})
+                                      "links":links,
+                                      "user_links":user_links,})
 
 
 @app.post('/signup')
@@ -289,6 +317,7 @@ async def logout(request: Request):
     redirectresponse = responses.RedirectResponse('/signup')
     redirectresponse.delete_cookie(key ='access_token')
     redirectresponse.delete_cookie(key ='refresh_token')
+    redirectresponse.delete_cookie(key ='user_dropbox_access_token')
     return redirectresponse
 
 

@@ -29,38 +29,30 @@
       .btnIcon:focus > i {
         color: #007b5e;
       }
-    </style>
+      .container div {
+          float: left;
+        }
+        .col-1-2 {
+          width: 50%;  
+        }
+          </style>
     <title>POCKET MEMORY</title>
   </head>
   <body>
     <section class="nav-section d-flex w-100">
       {% include 'components/nav.html' %}
     </section>
-    <section class="contacts">
+    <div class="container">
+    <div class="col-1-2">
+    <section>
       <form method="post" action="/uploadfiles" enctype="multipart/form-data" class="d-flex align-content-center justify-content-center gap-3">
         <div class="w-50">
-          <label for="file-text" class="form-label">Upload your Files</label>
+          <label for="file-text" class="form-label">Upload your common Files</label>
           <input class="form-control" name="file" id="file" type="file" accept="image/*,.pdf,.doc," size="" onchange="document.getElementById('file-text').textContent = this.files.length > 0 ? this.files[0].name : 'Select a file'">
         </div>
-        
           <button type="submit" class="btn btn-large btn-primary h-50 mt-auto">Upload</button>
-     
       </form>
     </section>
-    <!-- <script>
-      const input = document.getElementById('formFileLg')
-
-      input.addEventListener('change', (event) => {
-        const target = event.target
-          if (target.files && target.files[0]) {
-
-            const maxAllowedSize = 5 * 1024 * 1024;
-            if (target.files[0].size > maxAllowedSize) {
-              target.value = `Max length ${maxAllowedSize}`
-            }
-        }
-      })
-    </script> -->
     {% if links %}
     {% for item in links%}
       <ul>
@@ -71,6 +63,35 @@
       </ul>
       {% endfor %}
       {% endif %}
+    </div>
+    <div class="col-1-2">
+    <section class="user_files"></section>
+    Your own dropbox cloud
+      {% if user_links %}
+      <form method="post" action="/uploadfiles" enctype="multipart/form-data" class="d-flex align-content-center justify-content-center gap-3">
+        <div class="w-50">
+          <label for="file-text" class="form-label">Upload your own Files</label>
+          <input class="form-control" name="user_file" id="user_file" type="file" accept="image/*,.pdf,.doc," size="" onchange="document.getElementById('file-text').textContent = this.files.length > 0 ? this.files[0].name : 'Select a file'">
+        </div>
+          <button type="submit" class="btn btn-large btn-primary h-50 mt-auto">Upload</button>
+     
+      </form>
+      {% for item in user_links%}
+        <ul>
+          <li>
+            <a target="_blank" href="{{item.link}}" role="button" class="outline"
+              >{{item.name}}</a>
+          </li>
+        </ul>
+        {% endfor %}
+        {% endif %}
+        {% if not user_links %}
+          <form action="/uploadfiles" method="post">
+            <input type="text" id="token" name="token" class="token" value="Enter access token"/>
+            <button>Get access!</button>
+          </form>
+        {% endif %}
+  </section></div></div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
       integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
