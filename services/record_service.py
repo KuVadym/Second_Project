@@ -50,9 +50,6 @@ class RecordService:
     async def update_record(current_user: User, record_id: UUID, data: RecordAuth):
         if type(record_id)==str:
             record_id = UUID(record_id)
-        print('record_id')
-        print(record_id)
-        print(type(record_id))
         record = await Records.find_one(Records.id == record_id, Records.owner.id == current_user.id)
         data.birth_date = datetime(int(data.birth_date.split('-')[0]), int(data.birth_date.split('-')[1]), int(data.birth_date.split('-')[2][0:2]))
         await record.update({"$set": data.dict(exclude_unset=True)})

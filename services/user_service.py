@@ -17,7 +17,6 @@ class UserService:
             hashed_password=get_password(user.password)
         )
         await user_in.save()
-        print ("New user was created")
         return user_in
     
     @staticmethod

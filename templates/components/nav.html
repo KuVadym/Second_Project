@@ -16,9 +16,13 @@
   <div
     class="nav-user position-absolute top-0 end-0 m-5 px-5 text-white d-flex gap-2 align-items-canter justify-content-center right-5"
   >
-    <p>Welcome,</p>
-    <h3 class="text-lg user">{{user.username}}</h3>
+    <p style="color:antiquewhite;">Welcome,</p>
+    <h3 class="text-lg user" style="color:antiquewhite;">{{user.username}} </h3>
+    <button type="button" class="nav-item" data-bs-dismiss="modal" style="background-color: #151515; position:relative; top:-12px">
+      <a class="nav-link link" href="/logout" style="color:antiquewhite;">Log out</a>
+    </button>
   </div>
+  
   {% endif %}
   <div class="position-absolute top-0 m-3">
     <a href="/">

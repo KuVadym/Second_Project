@@ -78,5 +78,4 @@ class NoteService:
                     value.append(note)
                 else:
                     note_dict[tags.name] = [note]
-                    # print(note.name)
         return OrderedDict(sorted(note_dict.items()))

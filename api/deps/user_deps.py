@@ -27,7 +27,6 @@ async def get_current_user(token: str = Depends(reuseable_oauth)) -> User:
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except(jwt.JWTError, ValidationError):
-        print('exept\n?\n?')
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
@@ -35,8 +34,6 @@ async def get_current_user(token: str = Depends(reuseable_oauth)) -> User:
         )
         
     user = await UserService.get_user_by_id(token_data.sub)
-    print('user')
-    print(user)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

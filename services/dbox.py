@@ -11,7 +11,7 @@ class File(Document): # Now I don't know how it shoud work
     name = str
     link = str
 
-DROPBOX_ACCESS_TOKEN = 'sl.BP2oL3aBjZvPwvsYie63zBb7vEWmA8KhGuallMU2aRwTT2ARGu8K76hc1Jk-2_xec3lJ6aXf6W2r7ZTxdgtuxgXHd7v0uVtykrAPKoVLjQrmYBG-zmVibJhLvc6uh5r2USXMpqrfqGI3'
+DROPBOX_ACCESS_TOKEN = ''
 
 CATEGORIES = ['archives', 'audio', 'documents', 'images', 'video']
 
@@ -22,18 +22,18 @@ FILE_TYPES = {'images': ('JPEG', 'PNG', 'JPG', 'SVG', 'BMP', 'TIF', 'TIFF', 'GIF
               'video':  ('AVI', 'MP4', 'MOV', 'MKV', 'MPG')
         }
 
-def dropbox_connect():
+def dropbox_connect(dropbox_token=DROPBOX_ACCESS_TOKEN):
     """Create a connection to Dropbox."""
 
     try:
-        dbx = Dropbox(DROPBOX_ACCESS_TOKEN)
+        dbx = Dropbox(dropbox_token)
     except AuthError as e:
         print('Error connecting to Dropbox with access token: ' + str(e))
     return dbx
 
 
-def order_files():
-    links = dropbox_get_link()
+def order_files(dropbox_token=DROPBOX_ACCESS_TOKEN):
+    links = dropbox_get_link(dropbox_token=dropbox_token)
     sort_files = {'images':{}, 'documents':{}}
     for key, value in links.items():
         ext = key.split(".")[-1]
@@ -49,8 +49,8 @@ def order_files():
     return sort_files
 
 
-def dropbox_list_files():
-    dbx = dropbox_connect()
+def dropbox_list_files(dropbox_token=DROPBOX_ACCESS_TOKEN):
+    dbx = dropbox_connect(dropbox_token=dropbox_token)
     try:
         files = dbx.files_list_folder("").entries
         files_list = []
@@ -62,9 +62,9 @@ def dropbox_list_files():
         print('Error getting list of files from Dropbox: ' + str(e))
 
 
-def dropbox_upload_file(local_path, local_file, dropbox_file_path):
+def dropbox_upload_file(local_path, local_file, dropbox_file_path, dropbox_token=DROPBOX_ACCESS_TOKEN):
     try:
-        dbx = dropbox_connect()
+        dbx = dropbox_connect(dropbox_token=dropbox_token)
 
         local_file_path = pathlib.Path(local_path) / local_file
 
@@ -76,35 +76,27 @@ def dropbox_upload_file(local_path, local_file, dropbox_file_path):
         print('Error uploading file to Dropbox: ' + str(e))
 
 
-def dropbox_upload_binary_file(binary_file, dropbox_file_path):
+def dropbox_upload_binary_file(binary_file, dropbox_file_path, dropbox_token=DROPBOX_ACCESS_TOKEN):
     try:
-        dbx = dropbox_connect()
+        dbx = dropbox_connect(dropbox_token=dropbox_token)
         meta = dbx.files_upload(binary_file.read(), f"/{dropbox_file_path}", mode=dropbox.files.WriteMode("overwrite"))
 
         return meta
     except Exception as e:
         print('Error uploading file to Dropbox: ' + str(e))
 
-def dropbox_get_link():
-    links = {}
-    dbx = dropbox_connect()
-    files = dropbox_list_files('')
+def dropbox_get_link(dropbox_token=DROPBOX_ACCESS_TOKEN):
+    links = []
+    dbx = dropbox_connect(dropbox_token=dropbox_token)
+    files = dropbox_list_files(dropbox_token=dropbox_token)
     for file in files:
         try:
-            shared_link_metadata = dbx.sharing_create_shared_link_with_settings(file)
-            links[file[1:]]=(shared_link_metadata.url).replace('?dl=0', '?dl=1')
+            shared_link_metadata = dbx.sharing_create_shared_link_with_settings(file.path_display)
+            shared_link = (shared_link_metadata.url).replace('?dl=0', '?dl=1')
+            links.append(dict(name=file.path_display[1:], link=shared_link))
         except dropbox.exceptions.ApiError as exception:
             if exception.error.is_shared_link_already_exists():
-                shared_link_metadata = dbx.sharing_get_shared_links()
+                shared_link_metadata = dbx.sharing_get_shared_links(file.path_display)
                 shared_link = (shared_link_metadata.links[0].url).replace('?dl=0', '?dl=1')
-                links[file[1:]]=shared_link
+                links.append(dict(name=file.path_display[1:], link=shared_link))
     return links
-
-
-dropbox_list_files()
-
-# dropbox_upload_file(r'C:\Users\kuzik\Desktop', '2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg', f'/2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg')
-# dropbox_upload_binary_file()
-# sort_files = order_files()
-# print(sort_files)
-# 2000-a2907b9c3d50e49cd3e9303a04e8a8a2.jpg
