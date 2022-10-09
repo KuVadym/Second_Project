@@ -25,4 +25,4 @@ v. 0.0.2b
 1. Add solution for separete common files and user files. 
 
 bugs to solve:
-1. Dont work Notes tags
+1. Dont work Notes tags - now this function is deactivate.
