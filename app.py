@@ -24,28 +24,31 @@ from scrap.scrap import scraping
 from api.api_v1.hendlers.record import *
 from api.api_v1.hendlers import note
 from services.dbox import *
+from api.api_v1.hendlers.web_app import app
 
-app = FastAPI(
-    title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json"
-)
-api_router = APIRouter()
+app = app
 
-
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-@api_router.on_event("startup")
-async def app_init():
-    """
-        initialize crucial application services
-    """
-    db_client = AsyncIOMotorClient(settings.MONGO_CONNECTION_STRING).MyHelperMongoDB
-    await init_beanie(
-        database=db_client,
-        document_models= [Note, Tag, Record, Emails, Phones, Records, User])
+# app = FastAPI(
+#     title=settings.PROJECT_NAME,
+#     openapi_url=f"{settings.API_V1_STR}/openapi.json"
+# )
 
 
-app.include_router(router=api_router, prefix='', tags="")
+
+# app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# @api_router.on_event("startup")
+# async def app_init():
+#     """
+#         initialize crucial application services
+#     """
+#     db_client = AsyncIOMotorClient(settings.MONGO_CONNECTION_STRING).MyHelperMongoDB
+#     await init_beanie(
+#         database=db_client,
+#         document_models= [Note, Tag, Record, Emails, Phones, Records, User])
+
+
+
 app.include_router(router, prefix=settings.API_V1_STR)
 
 
