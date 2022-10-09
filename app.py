@@ -79,7 +79,7 @@ async def get_user(request):
         return user
 
 
-@app.get('/', response_class=HTMLResponse)
+@api_router.get('/', response_class=HTMLResponse)
 async def home(request: Request):
     if (request._cookies.get("access_token")):
         user = await get_user(request)
@@ -98,7 +98,7 @@ async def home(request: Request):
                                       "weather": weather,})
 
 
-@app.post('/', response_class=HTMLResponse)
+@api_router.post('/', response_class=HTMLResponse)
 async def home(request: Request):
     user = await get_user(request)
     # x = await list(user)
@@ -111,12 +111,12 @@ async def home(request: Request):
                                       "user": user.__dict__})
 
 
-@app.get('/signup', response_class=HTMLResponse)
+@api_router.get('/signup', response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 
-@app.get('/contacts', response_class=HTMLResponse)
+@api_router.get('/contacts', response_class=HTMLResponse)
 async def contacts(request: Request):
     user = await get_user(request)
     if not user:
@@ -128,7 +128,7 @@ async def contacts(request: Request):
                                       "list":list_records,})
 
 
-@app.post('/contacts', response_class=HTMLResponse)
+@api_router.post('/contacts', response_class=HTMLResponse)
 async def contacts(request: Request):
     if (await request.form()).get("name"):
         form = ContactCreateForm(request)
@@ -167,7 +167,7 @@ async def contacts(request: Request):
                                       "list":list_records})
 
 
-@app.get('/notes', response_class=HTMLResponse)
+@api_router.get('/notes', response_class=HTMLResponse)
 async def notes(request: Request):
     user = await get_user(request)
     if not user:
@@ -178,7 +178,7 @@ async def notes(request: Request):
                                       "user": user.__dict__,
                                       "notes":notes})
 
-@app.post('/notes', response_class=HTMLResponse)
+@api_router.post('/notes', response_class=HTMLResponse)
 async def notes(request: Request):
     x = await request.form()
     if (await request.form()).get("note-has-title"):
@@ -211,8 +211,8 @@ async def notes(request: Request):
                                       "notes":notes,
                                       })
 
-@app.post('/files', response_class=HTMLResponse)
-@app.get('/files', response_class=HTMLResponse)
+@api_router.post('/files', response_class=HTMLResponse)
+@api_router.get('/files', response_class=HTMLResponse)
 async def files(request: Request):
     user_links = ''
     user = await get_user(request)
@@ -238,9 +238,9 @@ async def files(request: Request):
                                       "user_links":user_links,
                                       "token": token,
                                       "user_token": user_token})
+ 
 
-
-@app.post('/uploadfiles', response_class=HTMLResponse)
+@api_router.post('/uploadfiles', response_class=HTMLResponse)
 async def files(request: Request):
     user = await get_user(request)
     if not user:
@@ -290,7 +290,7 @@ async def files(request: Request):
                                       "user_token": user_token})
 
 
-@app.post('/signup')
+@api_router.post('/signup')
 async def signup(request: Request):
     if (await request.form()).get("registerName"):
         form = UserCreateForm(request)
@@ -325,13 +325,13 @@ async def signup(request: Request):
     return templates.TemplateResponse("/signup", context={"request": request})
 
 
-@app.get('/presentation', response_class=HTMLResponse)
+@api_router.get('/presentation', response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("presentation.html",
                                       {"request": request})
 
 
-@app.get("/logout")
+@api_router.get("/logout")
 async def logout(request: Request):
     user = await get_user(request)
     redirectresponse = responses.RedirectResponse('/signup')
@@ -341,7 +341,7 @@ async def logout(request: Request):
     return redirectresponse
 
 
-@app.on_event("startup")
+@api_router.on_event("startup")
 async def app_init():
     """
         initialize crucial application services
@@ -352,7 +352,7 @@ async def app_init():
         document_models= [Note, Tag, Record, Emails, Phones, Records, User])
 web_router = APIRouter()
 web_router.include_router(router=api_router, prefix='', tags=["web-app"])
-app.include_router(web_router, prefix=settings.API_V1_STR)
+app.include_router(router=api_router, prefix='', tags="")
 app.include_router(router, prefix=settings.API_V1_STR)
 
 
