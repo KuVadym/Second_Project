@@ -218,21 +218,30 @@ async def files(request: Request):
     user = await get_user(request)
     if not user:
         return responses.RedirectResponse('/signup')
-    links = dropbox_get_link()
+    links = ""
+    token = True
+    user_token = True
+    try:
+        links = dropbox_get_link()
+    except:
+        print("no valid token for common files")
+        token = False
     try:
         user_links = dropbox_get_link(dropbox_token=request._cookies.get("user_dropbox_access_token"))
     except:
         print("no valid token")
+        user_token = False
     return templates.TemplateResponse("files/files.html",
                                      {"request": request,
                                       "user": user.__dict__,
                                       "links":links,
-                                      "user_links":user_links,})
+                                      "user_links":user_links,
+                                      "token": token,
+                                      "user_token": user_token})
 
 
 @app.post('/uploadfiles', response_class=HTMLResponse)
 async def files(request: Request):
-    user_links = '' 
     user = await get_user(request)
     if not user:
         return responses.RedirectResponse('/signup')
@@ -258,16 +267,27 @@ async def files(request: Request):
             return redirectresponse
         except:
             error_massege = 'Enter your access token in form'
-    links = dropbox_get_link()
+    links = ""
+    token = True
+    user_token = True
+    user_links = ''
+    try:
+        links = dropbox_get_link()
+    except:
+        print("no valid token for common files")
+        token = False
     try:
         user_links = dropbox_get_link(dropbox_token=request._cookies.get("user_dropbox_access_token"))
     except:
-        print('Enter your access token in form')
+        print("no valid token")
+        user_token = False
     return templates.TemplateResponse("files/files.html",
                                      {"request": request,
                                       "user": user.__dict__,
                                       "links":links,
-                                      "user_links":user_links,})
+                                      "user_links":user_links,
+                                      "token": token,
+                                      "user_token": user_token})
 
 
 @app.post('/signup')
