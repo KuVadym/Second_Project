@@ -131,7 +131,7 @@
                         ></button>
                       </div>
                       <div class="modal-body">
-                        <form action="/contacts" method="POST">
+                        <form action="/api/v1/web/contacts" method="POST">
                           <!-- Hidden -->
                           <input type="hidden" name="new_contact-id" value="{{contact.id}}">
                           <!-- Name input -->
@@ -213,7 +213,7 @@
                     </div>
                   </div>
                 </div>
-                  <form action="/contacts" method="POST">
+                  <form action="/api/v1/web/contacts" method="POST">
                      <input type="hidden" name="contact-id" value="{{contact.id}}">
                   <button
                   

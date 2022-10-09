@@ -4,13 +4,13 @@
     class="nav justify-content-center nav-style pt-5 border-bottom border-light"
   >
     <li class="nav-item border-1">
-      <a class="nav-link link" href="/contacts">Contacts</a>
+      <a class="nav-link link" href="/api/v1/web/contacts">Contacts</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link link" href="/notes">Notes</a>
+      <a class="nav-link link" href="/api/v1/web/notes">Notes</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link link" href="/files">Files</a>
+      <a class="nav-link link" href="/api/v1/web/files">Files</a>
     </li>
   </ul>
   <div
@@ -19,14 +19,14 @@
     <p style="color:antiquewhite;">Welcome,</p>
     <h3 class="text-lg user" style="color:antiquewhite;">{{user.username}} </h3>
     <button type="button" class="nav-item" data-bs-dismiss="modal" style="background-color: #151515; position:relative; top:-12px">
-      <a class="nav-link link" href="/logout" style="color:antiquewhite;">Log out</a>
+      <a class="nav-link link" href="/api/v1/web/logout" style="color:antiquewhite;">Log out</a>
     </button>
   </div>
   
   {% endif %}
   <div class="position-absolute top-0 m-3">
-    <a href="/">
-      <img src="../static/image/owl.svg" alt="owl" />
+    <a href="/api/v1/web/">
+      <img src="/static/image/owl.svg" alt="owl" />
     </a>
   </div>
   <div class="position-absolute top-0 end-0 m-5">
