@@ -358,10 +358,8 @@ app.include_router(router, prefix=settings.API_V1_STR)
 
 # uvicorn app:app --reload
 if __name__ == "__main__":
-    config = uvicorn.Config("app:app", 
-                            port=8000, 
+    config = uvicorn.Config("app:app",
                             log_level="info", 
-                            reload=True, 
-                            host="0.0.0.0")
+                            reload=True)
     server = uvicorn.Server(config)
     server.run()
