@@ -39,8 +39,8 @@ crossorigin="anonymous"
       </section>  
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="page-content container note-has-grid mt-5">
-    <!-- <ul class="nav nav-pills p-3 bg-white mb-3 rounded-pill align-items-center">
-        <li class="nav-item">
+    <ul class="nav nav-pills p-3 bg-white mb-3 rounded-pill align-items-center">
+    <!--     <li class="nav-item">
             <a href="javascript:void(0)" class="nav-link rounded-pill note-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2 active" id="all-category">
                 <i class="icon-layers mr-1"></i><span class="d-none d-md-block">All Notes</span>
             </a>
@@ -53,11 +53,11 @@ crossorigin="anonymous"
         </li>
         <li class="nav-item">
             <a href="javascript:void(0)" class="nav-link rounded-pill note-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2" id="note-important"> <i class="icon-tag mr-1"></i><span class="d-none d-md-block">Important</span></a>
-        </li>
+        </li> -->
         <li class="nav-item ml-auto">
             <a href="javascript:void(0)" class="nav-link btn-block rounded-pill d-flex align-items-center px-3" id="add-notes"> <i class="icon-note m-1"></i><span class="d-none d-md-block font-14">Add Notes</span></a>
         </li>
-    </ul> -->
+    </ul>
     <div class="tab-content bg-transparent">
         <div id="note-full-container" class="note-has-grid row">
             {% for note in notes %}
@@ -72,7 +72,7 @@ crossorigin="anonymous"
                     <div class="d-flex align-items-center">
                         <!-- <span class="mr-1"><i class="fa fa-star favourite-note"></i></span>
                         <span class="mr-1"> -->
-                        <form action="/notes" method="POST">
+                        <form action="/api/v1/web/notes" method="POST">
                             <input type="hidden" name="note-id" id="note-id" value="{{note.id}}">
                          <button
                          
@@ -119,7 +119,7 @@ crossorigin="anonymous"
     </div>
 
     <!-- Modal Add notes -->
-    <form  action="/notes" method="POST">
+    <form  action="/api/v1/web/notes" method="POST">
     <div class="modal fade" id="addnotesmodal" tabindex="-1" role="dialog" aria-labelledby="addnotesmodalTitle" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content border-0">
