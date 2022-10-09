@@ -362,6 +362,6 @@ if __name__ == "__main__":
                             port=8000, 
                             log_level="info", 
                             reload=True, 
-                            host="localhost")
+                            host="127.0.0.1")
     server = uvicorn.Server(config)
     server.run()
