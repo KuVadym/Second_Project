@@ -1,6 +1,12 @@
-from fastapi import Request, APIRouter, responses
+import uvicorn
+from http import server
+from fastapi import FastAPI, Request, APIRouter, responses
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from core.config import settings
+from beanie import init_beanie
+from motor.motor_asyncio import AsyncIOMotorClient
 from models.models_mongo import *
 from schemas.note_schema import NoteAuth
 from schemas.record_schema import RecordAuth
@@ -17,7 +23,17 @@ from scrap.scrap import scraping
 from api.api_v1.hendlers.record import *
 from api.api_v1.hendlers import note
 from services.dbox import *
-from beanie import init_beanie
+
+
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    openapi_url=f"{settings.API_V1_STR}/openapi.json"
+)
+api_router = APIRouter()
+
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 
 valute = {}
@@ -35,9 +51,6 @@ def main_scrap():
 
 Thread(target=main_scrap, args=()).start()
 
-
-
-api_router = APIRouter()
 
 recordService = RecordService()
 userService = UserService()
@@ -326,3 +339,18 @@ async def logout(request: Request):
     redirectresponse.delete_cookie(key ='refresh_token')
     redirectresponse.delete_cookie(key ='user_dropbox_access_token')
     return redirectresponse
+
+
+@api_router.on_event("startup")
+async def app_init():
+    """
+        initialize crucial application services
+    """
+    db_client = AsyncIOMotorClient(settings.MONGO_CONNECTION_STRING).MyHelperMongoDB
+    await init_beanie(
+        database=db_client,
+        document_models= [Note, Tag, Record, Emails, Phones, Records, User])
+
+
+# app.include_router(router=api_router, prefix='/web', tags="web")
+# app.include_router(router, prefix=settings.API_V1_STR)
