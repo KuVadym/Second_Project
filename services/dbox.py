@@ -4,14 +4,22 @@ import dropbox
 from dropbox import Dropbox
 from dropbox.exceptions import AuthError
 import io
+import base64
 
 from beanie import Document
 
-class File(Document): # Now I don't know how it shoud work 
+class File(Document): # Now I don't know how it shoud work
     name = str
     link = str
 
-DROPBOX_ACCESS_TOKEN = ''
+#DROPBOX_ACCESS_TOKEN = 'sl.BQWHOIKbAlwCQ7eQB8TzNFegHfyIvbuXxZTTxkJuQ3ZNcqpDjWkzqEBhUHyeSHczcXgTHf9c5ZNrtzMZxXQlvBXV88oJzyE-tf090x39APqSWSWJpIg2QcjxVr879pFo3tpq4_Qt9Rz6'
+
+base64_DROPBOX_ACCESS_TOKEN = 'c2wuQlFvbks4bWdOTzN2OHVLZnZYaUlGYThrUkF4c1FHN2Q5WEY3Z285ZUtxbzN0dVk5Q3NNYXpjVzhnekJnNnRha18zdl9IaHh5VE84b3BfMEJXeFdSSWNnQjAtWUdiVHZ3RzZoU3FwLWlfNGpzTXBwMEVNZ1lfSGFULW9Nb0hHdHNkOWRyT21SRVFwcUE='
+
+base64_bytes = base64_DROPBOX_ACCESS_TOKEN.encode('ascii')
+message_bytes = base64.b64decode(base64_bytes)
+DROPBOX_ACCESS_TOKEN = message_bytes.decode('ascii')
+
 
 CATEGORIES = ['archives', 'audio', 'documents', 'images', 'video']
 
