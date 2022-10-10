@@ -175,3 +175,25 @@ class FileUploadForm:
     async def load_data(self):
         form = await self.request.form()
         self.file = form.get("file")
+
+
+class FileAccessTokenForm:
+    def __init__(self, request: Request):
+        self.request: Request = request
+        self.errors: List = []
+        self.token = None
+
+    async def load_data(self):
+        form = await self.request.form()
+        self.token = form.get("token")
+
+
+class FileUserUploadForm:
+    def __init__(self, request: Request):
+        self.request: Request = request
+        self.errors: List = []
+        self.file = None
+
+    async def load_data(self):
+        form = await self.request.form()
+        self.file = form.get("user_file")

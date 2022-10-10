@@ -1,16 +1,16 @@
 <div
   class="modal fade"
-  id="staticBackdrop"
+  id="edit"
   data-bs-backdrop="static"
   data-bs-keyboard="false"
   tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
+  aria-labelledby="edit"
   aria-hidden="true"
 >
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">POCKET MEMORY</h5>
+        <h5 class="modal-title" id="edit">POCKET MEMORY</h5>
         <button
           type="button"
           class="btn-close"
@@ -20,61 +20,68 @@
       </div>
       <div class="modal-body">
         <form action="/api/v1/web/contacts" method="POST">
+          <!-- Hidden -->
+          <input type="hidden" name="new_contact-id" value="this.{{contact.id}}">
           <!-- Name input -->
           <div class="form-outline mb-4">
             <input
               type="text"
               id="name"
-              name="name"
+              name="new_name"
               class="form-control"
-              
+              value="{{contact.name}}"
             />
             <label class="form-label" for="name">Name</label>
           </div>
 
           <!-- Email input -->
+          {%for listEmail in contact.emails %}
           <div class="form-outline mb-4">
             <input
               type="email"
               id="emails"
-              name="emails"
+              name="new_emails"
               class="form-control"
+              value="{{listEmail.email}}"
             />
             <label class="form-label" for="emails">Email</label>
           </div>
-
+          {% endfor %}
           <!-- Password input -->
           <div class="form-outline mb-4">
             <input
               type="text"
               id="address"
-              name="address"
+              name="new_address"
               class="form-control"
             />
             <label class="form-label" for="address">Address</label>
           </div>
 
           <!-- Repeat Password input -->
+          {%for listPhones in contact.phones %}
           <div class="form-outline mb-4">
             <input
               type="phones"
               id="phones"
-              name="phones"
+              name="new_phones"
               class="form-control"
               required
               pattern="^[0-9]{10}$"
+              value="{{listPhones.phone}}"
             />
             <label class="form-label" for="phones"
               >Phones</label
             >
           </div>
-
+          {% endfor %}
           <div class="form-outline mb-4">
             <input
               type="date"
               id="birth_date"
-              name="birth_date"
+              name="new_birth_date"
               class="form-control"
+              value="{{contact.birth_date.strftime('%Y-%m-%d') if contact.birth_date else Date }}"
             />
             <label class="form-label" for="birth_date"
               >Birth Date</label
@@ -86,10 +93,12 @@
           Close
         </button>
         <button type="submit" class="btn btn-primary btn-block">
-            Add contact
+            Edit contact
           </button>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+

@@ -169,7 +169,6 @@ def scraping():
     def get_data_web9(url):
         pass
         response = work.get(url, headers=headers)
-        # print("Status: Gismeteo Kyiv", response.status_code)
         if response.status_code == 200:
             response.encoding = 'utf8'
             html = response.text
@@ -222,33 +221,8 @@ def scraping():
     get_data_web9(url9)
     get_data_web10(url10)
     get_data_web11(url11)
-    # print(valute['bank1_usd'])
-    # print(valute['bank1_eur'])
-    # print(valute['bank2_usd'])
-    # print(valute['bank2_eur'])
-    # print(valute['bank3_usd'])
-    # print(valute['bank3_eur'])
-    # print(news['oboz1'])
-    # print(news['oboz2'])
-    # print(news['korr1'])
-    # print(news['korr2'])
-    # print(news['bbc1'])
-    # print(news['bbc2'])
-    # print(sport['foot1'])
-    # print(sport['foot2'])
-    # print(sport['foot3'])
-    # print(sport['box1'])
-    # print(sport['box2'])
-    # print(sport['box3'])
-    # print(weather['gis1'])
-    # print(weather['gis2'])
-    # print(weather['gis3'])
     return valute, news, sport, weather
 
 
 if __name__ == "__main__":
     v, n, s, w = scraping()
-    print(v)
-    print(n)
-    print(s)
-    print(w)
