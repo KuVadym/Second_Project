@@ -22,7 +22,10 @@ v. 0.0.2a
 2. Now in files correct app get file links from dropbox.com
 
 v. 0.0.2b
-1. Add solution for separete common files and user files. 
+1. Add solution for separete common files and user files.
+
+v. 0.0.2c
+1. Now you can encode dropbox token and use dropbox cloud in common app.
 
 bugs to solve:
 1. Dont work Notes tags - now this function is deactivate.

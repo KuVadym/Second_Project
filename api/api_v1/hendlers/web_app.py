@@ -211,8 +211,36 @@ async def notes(request: Request):
                                       "notes":notes,
                                       })
 
-@api_router.post('/files', response_class=HTMLResponse)
+
 @api_router.get('/files', response_class=HTMLResponse)
+async def files(request: Request):
+    user_links = ''
+    user = await get_user(request)
+    if not user:
+        return responses.RedirectResponse('/api/v1/web/signup')
+    links = ""
+    token = True
+    user_token = True
+    try:
+        links = dropbox_get_link()
+    except:
+        print("no valid token for common files")
+        token = False
+    try:
+        user_links = dropbox_get_link(dropbox_token=request._cookies.get("user_dropbox_access_token"))
+    except:
+        print("no valid token")
+        user_token = False
+    return templates.TemplateResponse("files/files.html",
+                                     {"request": request,
+                                      "user": user.__dict__,
+                                      "links":links,
+                                      "user_links":user_links,
+                                      "token": token,
+                                      "user_token": user_token})
+
+
+@api_router.post('/files', response_class=HTMLResponse)
 async def files(request: Request):
     user_links = ''
     user = await get_user(request)
@@ -260,7 +288,7 @@ async def files(request: Request):
         form = FileAccessTokenForm(request)
         await form.load_data()
         user_dropbox_access_token = form.token
-        redirectresponse = responses.RedirectResponse('/files')
+        redirectresponse = responses.RedirectResponse('/api/v1/web/files')
         redirectresponse.set_cookie(key="user_dropbox_access_token", value=user_dropbox_access_token) 
         try:
             user_links = dropbox_get_link(user_dropbox_access_token)
@@ -290,6 +318,7 @@ async def files(request: Request):
                                       "user_token": user_token})
 
 
+@api_router.get('/signup')
 @api_router.post('/signup')
 async def signup(request: Request):
     if (await request.form()).get("registerName"):
@@ -334,7 +363,7 @@ async def home(request: Request):
 @api_router.get("/logout")
 async def logout(request: Request):
     user = await get_user(request)
-    redirectresponse = responses.RedirectResponse('/signup')
+    redirectresponse = responses.RedirectResponse('/api/v1/web/signup')
     redirectresponse.delete_cookie(key ='access_token')
     redirectresponse.delete_cookie(key ='refresh_token')
     redirectresponse.delete_cookie(key ='user_dropbox_access_token')
