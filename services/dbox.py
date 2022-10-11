@@ -12,9 +12,9 @@ class File(Document): # Now I don't know how it shoud work
     name = str
     link = str
 
-#DROPBOX_ACCESS_TOKEN = 'sl.BQWHOIKbAlwCQ7eQB8TzNFegHfyIvbuXxZTTxkJuQ3ZNcqpDjWkzqEBhUHyeSHczcXgTHf9c5ZNrtzMZxXQlvBXV88oJzyE-tf090x39APqSWSWJpIg2QcjxVr879pFo3tpq4_Qt9Rz6'
+# DROPBOX_ACCESS_TOKEN = ''
 
-base64_DROPBOX_ACCESS_TOKEN = 'c2wuQlFvbks4bWdOTzN2OHVLZnZYaUlGYThrUkF4c1FHN2Q5WEY3Z285ZUtxbzN0dVk5Q3NNYXpjVzhnekJnNnRha18zdl9IaHh5VE84b3BfMEJXeFdSSWNnQjAtWUdiVHZ3RzZoU3FwLWlfNGpzTXBwMEVNZ1lfSGFULW9Nb0hHdHNkOWRyT21SRVFwcUE='
+base64_DROPBOX_ACCESS_TOKEN = 'c2wuQlFfZzZEVWJoRGpKY0xwM0M2cmNaNWR6SjJpUFZQa0N4N1BlbEM3eGs1M3BWNkY5M3RJcnhpaFZwYjdaZlpzOWF2REdldzViaGkzaEJ2RWtWaEd4UTJ4NHdNYUdoY3RlVmdsWFNzMmktWURRQkhjTWxZUGVmeHBzU3dmSDNGWjVqa3FTZ3ZyYzBwODk='
 
 base64_bytes = base64_DROPBOX_ACCESS_TOKEN.encode('ascii')
 message_bytes = base64.b64decode(base64_bytes)
@@ -94,6 +94,7 @@ def dropbox_upload_binary_file(binary_file, dropbox_file_path, dropbox_token=DRO
         print('Error uploading file to Dropbox: ' + str(e))
 
 def dropbox_get_link(dropbox_token=DROPBOX_ACCESS_TOKEN):
+    print(dropbox_token)
     links = []
     dbx = dropbox_connect(dropbox_token=dropbox_token)
     files = dropbox_list_files(dropbox_token=dropbox_token)
