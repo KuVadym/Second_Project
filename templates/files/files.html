@@ -35,6 +35,33 @@
         .col-1-2 {
           width: 50%;  
         }
+        .listLink{
+          display: grid;
+          grid-template-columns: repeat(4,1fr);
+          gap: 24px;
+          list-style: none;
+          padding-right: 2rem;
+        }
+        .listItem{
+          cursor: pointer;
+          display: flex;
+          background-color: #007b5e;
+          padding: 20px;
+          border-radius: 20px;
+          margin-top: 20px;
+           border: 2px solid transparent;
+        }
+
+        .listItem  a{
+          display: flex;
+          gap: 8px;
+          white-space: nowrap;
+          color: white;
+          text-decoration: none;
+        }
+        .listItem:hover{
+          border: 2px solid black;
+        }
           </style>
     <title>POCKET MEMORY</title>
   </head>
@@ -42,9 +69,7 @@
     <section class="nav-section d-flex w-100">
       {% include 'components/nav.html' %}
     </section>
-    <div class="container">
-    <div class="col-1-2">
-      <br>
+    <section>
     {% if not token %}
     <p>Sorry our admin didn`t refresh access token for common dropbox cloud. But you can use your own dropbox cloud.</p>
     {% endif %}
@@ -61,7 +86,7 @@
     {% endif %}
     {% if links %}
     {% for item in links%}
-      <ul>
+      <ul >
         <li>
           <a target="_blank" href="{{item.link}}" role="button" class="outline"
             >{{item.name}}</a>
@@ -69,10 +94,7 @@
       </ul>
       {% endfor %}
       {% endif %}
-    </div>
-    <div class="col-1-2">
-      <br>
-    <section class="user_files"></section>
+    <div class="w-100">
     Your own dropbox cloud
         {% if user_token %}
         <form method="post" action="/api/v1/web/uploadfiles" enctype="multipart/form-data" class="d-flex align-content-center justify-content-center gap-3">
@@ -83,15 +105,20 @@
             <button type="submit" class="btn btn-large btn-primary h-50 mt-auto">Upload</button>
         </form>
         {% if user_links %}
+        <ul class="listLink">
           {% for item in user_links%}
-          <ul>
-            <li>
+            <li class="listItem">
               <a target="_blank" href="{{item.link}}" role="button" class="outline"
-                >{{item.name}}</a>
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="12" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M17.3383 10.0005C17.3383 10.0181 17.3294 10.0331 17.3279 10.0502V17C17.3279 17.5517 16.8631 18 16.2915 18H9.03643C8.46479 18 8 17.5517 8 17V7C8 6.44885 8.46479 6 9.03643 6H13.1822C13.2055 6 13.2252 6.01003 13.248 6.01304C13.2714 6.01605 13.2921 6.02006 13.315 6.02608C13.4031 6.04915 13.4856 6.08626 13.5484 6.14694L17.1194 9.59278C17.136 9.60381 17.1437 9.62287 17.1588 9.63591C17.1743 9.64945 17.1858 9.66499 17.1992 9.68054C17.2791 9.76831 17.3383 9.87462 17.3383 10.0005ZM9.03643 17H16.2915V10.4774H13.1879C12.9015 10.4774 12.6639 10.2768 12.6639 10.0005V6.9669H9.03799L9.03643 17ZM13.7004 7.70762V9.5005H15.5585L13.7004 7.70762Z" fill="green"/>
+              </svg>
+              {{item.name}}
+            </a>
             </li>
+            {% endfor %}
           </ul>
-          
-          {% endfor %}
           {%endif%}
         {% endif %}
         {% if not user_token %}
@@ -99,13 +126,13 @@
           <input type="text" id="token" name="token" class="token" value="Enter access token"/>
           <button>Get access!</button>
         </form>
-            <a href="https://dropbox.com/developers/reference/getting-started#app%20console">How use it.</a>
+          <a href="https://dropbox.com/developers/reference/getting-started#app%20console">How use it.</a>
         {% endif %}
-  </section></div></div>
+  </section>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
       integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
       crossorigin="anonymous"
     ></script>
   </body>
-</html>
+</html>Activate.ps1
