@@ -17,7 +17,15 @@ v. 0.0.2
 6. After creating new note, show all notes (befor show emty page)
 7. Add Logout function, and update templates.
 
+v. 0.0.2a
+1. Incorrect edit contact form. (You can edit just first contact on page!) done
+2. Now in files correct app get file links from dropbox.com
 
-Bugs:
-1. Incorrect edit contact form. (You can edit just first contact on page!)
-2. Dont work Notes tags
+v. 0.0.2b
+1. Add solution for separete common files and user files.
+
+v. 0.0.2c
+1. Now you can encode dropbox token and use dropbox cloud in common app.
+
+bugs to solve:
+1. Dont work Notes tags - now this function is deactivate.

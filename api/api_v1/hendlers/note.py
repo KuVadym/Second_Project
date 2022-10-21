@@ -12,9 +12,6 @@ note_router = APIRouter()
 
 @note_router.get('/search', summary="Search note by user input", response_model=List[NoteAuth])
 async def search(data: str, current_user: User = Depends(get_current_user)):
-    print("search starts")
-    print(data)
-    print(current_user)
     return await NoteService.search_note(current_user, data)
     
 
