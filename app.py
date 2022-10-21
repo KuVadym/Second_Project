@@ -313,7 +313,7 @@ if __name__ == "__main__":
     config = uvicorn.Config("app:app", 
                             port=8000, 
                             log_level="info", 
-                            reload=True, 
+                            reload=False,
                             host="0.0.0.0")
     server = uvicorn.Server(config)
     server.run()

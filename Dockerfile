@@ -24,6 +24,7 @@ ENV JWT_SECRET_KEY=qwerty
 ENV JWT_REFRESH_SECRET_KEY=ytrew
 ENV MONGO_CONNECTION_STRING=mongodb+srv://VadymKu:k*V190821@cluster0.nrqiq.mongodb.net/?retryWrites=true&w=majority
 
-ENTRYPOINT ["python"]
+EXPOSE 8000
 
-CMD ["app.py" ]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["gunicorn", "-b", "127.0.0.1:8000", "app:app"]

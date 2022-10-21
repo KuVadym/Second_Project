@@ -73,18 +73,21 @@ def scraping():
         response = work.get(url, headers=headers)
         # print("Status: UKRSibbank", response.status_code)
         if response.status_code == 200:
-            html = response.text
-            soup = BeautifulSoup(html, 'lxml')
-            datas = soup.find('tbody')
-            data = datas.find_all('td')
-            name = data[0].text.replace('\n', '')[:3]
-            sold = data[1].text.replace('\n', '')[7:12]
-            sale = data[2].text.replace('\n', '')[7:12]
-            valute['bank3_usd'] = 'UKRSibbank ' + name + ' ' + sold + ' ' + sale
-            name = data[4].text.replace('\n', '')[:3]
-            sold = data[5].text.replace('\n', '')[7:12]
-            sale = data[6].text.replace('\n', '')[7:12]
-            valute['bank3_eur'] = 'UKRSibbank ' + name + ' ' + sold + ' ' + sale
+            try:
+                html = response.text
+                soup = BeautifulSoup(html, 'lxml')
+                datas = soup.find('tbody')
+                data = datas.find_all('td')
+                name = data[0].text.replace('\n', '')[:3]
+                sold = data[1].text.replace('\n', '')[7:12]
+                sale = data[2].text.replace('\n', '')[7:12]
+                valute['bank3_usd'] = 'UKRSibbank ' + name + ' ' + sold + ' ' + sale
+                name = data[4].text.replace('\n', '')[:3]
+                sold = data[5].text.replace('\n', '')[7:12]
+                sale = data[6].text.replace('\n', '')[7:12]
+                valute['bank3_eur'] = 'UKRSibbank ' + name + ' ' + sold + ' ' + sale
+            except:
+                pass
 
     def get_data_web4(url):
         pass
